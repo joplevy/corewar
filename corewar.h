@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/04/18 22:11:46 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/04/19 01:40:28 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ ACCESS("t_process*", glob->procs, "carry");
 
 typedef struct		s_process
 {
+	char			player;
 	int				carry;
 	int				live;
 	void			regs[REG_NUMBER][REG_SIZE];
