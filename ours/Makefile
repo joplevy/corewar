@@ -11,11 +11,13 @@
 # **************************************************************************** #
 
 ASM = asm
-VM = vm
+VM = corewar
 CC = gcc
 CFLAG = -Wall -Werror -Wextra
-ASMSRC = ./assembleur/src/main.c ./include/op.c
-ASMOBJ = $(ASMSRC:.c=.o)
+# ASMSRC = ./assembleur/src/main_asm.c ./include/op.c
+# ASMOBJ = $(ASMSRC:.c=.o)
+VMSRC = ./vm/test_ncurses.c ./include/op.c
+VMOBJ = $(VMSRC:.c=.o)
 LIBFT_PATH = ./libft/libft/
 PRINTF_PATH = ./libft/
 PRINTF = ./libft/libftprintf.a
@@ -23,12 +25,17 @@ LIBFT = ./libft/libft/libft.a
 RM = rm -f
 CFLAGS = -Wall -Wextra -Werror
 
-all: $(ASM)
+all: $(VM)
 
 $(ASM): $(ASMOBJ)
 	@$(MAKE) -C $(PRINTF_PATH)
 	@$(MAKE) -C $(LIBFT_PATH)
 	@$(CC) -o $(ASM) $(ASMOBJ) -I./include -L. $(LIBFT) $(PRINTF)
+
+$(VM) : $(VMOBJ)
+	@$(MAKE) -C $(PRINTF_PATH)
+	@$(MAKE) -C $(LIBFT_PATH)
+	@$(CC) -o $(VM) $(VMOBJ) -I./include -L. $(LIBFT) $(PRINTF) -lncurses
 
 %.o: %.c
 	@$(CC) $(CFLAG) -o $@ -c $< -I./include
