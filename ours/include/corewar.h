@@ -38,6 +38,7 @@ typedef struct		s_player
 {
 	int				id;
 	int				live;
+	int				end;
 	char			*name;
 	char			*comment;
 	char			*code;

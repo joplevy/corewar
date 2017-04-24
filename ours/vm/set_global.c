@@ -64,11 +64,6 @@ int				get_players(int argc, char **argv, t_global *global)
 	return (1);
 }
 
-int				load_players(t_global *global)
-{
-	
-}
-
 int				set_global(int argc, char **argv, t_global *global)
 {
 	global->procs = NULL;
@@ -84,4 +79,17 @@ int				set_global(int argc, char **argv, t_global *global)
 		|| !load_players(global))
 		return (0);
 	return (1);
+}
+
+int set_arena(t_global *gb)
+{
+	int i;
+
+	i = 0;
+	while(i <= MEM_SIZE)
+	{
+		gb->(char)arena[i] = 0;
+		++i;
+	}
+	return (0);
 }
