@@ -7,10 +7,8 @@ WINDOW *create_newwin(int height, int width, int starty, int startx)
 	WINDOW *local_win;
 
 	local_win = newwin(height, width, starty, startx);
-	box(local_win, 0 , 0);		/* 0, 0 gives default characters 
-					 * for the vertical and horizontal
-					 * lines			*/
-	wrefresh(local_win);		/* Show that box 		*/
+	box(local_win, 0 , 0);		
+	wrefresh(local_win);
 
 	return local_win;
 }
@@ -23,17 +21,20 @@ int		main()
 	all = (t_global*)malloc(sizeof(t_global));
 	all->arena= ft_memalloc(MEM_SIZE);
 	initscr();
+	start_color();			/* Start color 			*/
+	init_pair(1, COLOR_RED, COLOR_BLACK);
 	refresh();
 	box = create_newwin(5, 5, 0, 0);
-	// box(box, '*', '*');
-	// wborder(box, '|', '|', '-', '-', '+', '+', '+', '+');
+	wbkgd(box,COLOR_PAIR(1));
+	// attron(COLOR_PAIR(1));
 	printw("%d\n", 0);
 	printw("%d\n", 1);
 	printw("%d", 2);
+	// attroff(COLOR_PAIR(1));
 	printw("%d", 3);
 	printw("%d", 4);
-	move(1, 0);
-	printw("%d", 5);
+	move(4, 0);
+	printw("%d", 9);
 	getch();
 	delwin(box);
 	endwin();
