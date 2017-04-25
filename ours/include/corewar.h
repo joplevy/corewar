@@ -18,9 +18,9 @@
 # include <libft.h>
 # include <op.h>
 # include <ft_printf.h>
-# define ACCESS(TYPE, NODE, ELEM) (((TYPE)((NODE)->data))->(ELEM))
+# define ACC(TYPE, NODE, ELEM) (((TYPE)((NODE)->data))->(ELEM))
 
-// ACCESS("t_process*", glob->procs, "carry");
+// ACC("t_process*", glob->procs, "carry");
 
 typedef struct		s_process
 {
@@ -49,11 +49,11 @@ typedef struct 		s_global
 {
 	t_list			*procs;
 	t_player		*players[MAX_PLAYERS + 1];
-	void			*arena;
+	unsigned char	*arena;
 	int				lives;
-	int				last;
+	int				last_id;
 	int				ctd;
-	int				check;
+	int				ckecks;
 	int				dump;
 	int				show;
 }					t_global;

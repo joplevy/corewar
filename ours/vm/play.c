@@ -18,9 +18,15 @@ void			treat_all_procs(t_global *global)
 
 	tmp = global->procs;
 	while (tmp != NULL)
-		
 	{
-		if (ACCESS(tmp, wait))
+		if (ACC(tmp, wait) == 1)
+		{
+			exec_instruction(ACC(tmp, current), global);
+			go_to_next((t_player*)(tmp->content), global->arena);
+		}
+		else if (ACC(tmp, wait) > 0)
+			ACC(tmp, wait) -= 1;
+		tmp = tmp->next;
 	}
 }
 
