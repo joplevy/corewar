@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/04/20 23:30:25 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/04/25 23:28:05 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <libft.h>
 # include <op.h>
 # include <ft_printf.h>
-# define ACC(TYPE, NODE, ELEM) (((TYPE)((NODE)->data))->(ELEM))
+# define ACC(NODE, ELEM) (((t_process*)((NODE)->content))->(ELEM))
 
 // ACC("t_process*", glob->procs, "carry");
 
@@ -38,7 +38,7 @@ typedef struct		s_player
 {
 	int				id;
 	int				live;
-	int				end;
+	int				size;
 	char			*name;
 	char			*comment;
 	char			*code;
@@ -53,7 +53,7 @@ typedef struct 		s_global
 	int				lives;
 	int				last_id;
 	int				ctd;
-	int				ckecks;
+	int				checks;
 	int				dump;
 	int				show;
 }					t_global;

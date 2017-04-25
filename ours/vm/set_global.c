@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 21:31:47 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/04/22 16:36:54 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/04/25 23:25:25 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,23 @@ int				init_arena(t_global *global)
 	return (1);
 }
 
-int				set_global(int argc, char **argv, t_global *global)
+t_global			*init_global(int argc, char **argv)
 {
-	global->procs = NULL;
-	(global->players)[0] = NULL;
-	global->lives = 0;
-	global->last_id = 0;
-	global->ctd = CYCLE_TO_DIE;
-	global->checks = 0;
-	global->dump = 0;
-	global->show = 0;
-	if (!init_arena(global) /
-		|| !get_players(argc, argv, global)\
-		|| !load_players(global))
+	t_global		*ret;
+
+	if ((ret = (t_global*)malloc(sizeof(t_global))) == NULL)
+		return (NULL);
+	ret->procs = NULL;
+	(ret->players)[0] = NULL;
+	ret->lives = 0;
+	ret->last_id = 0;
+	ret->ctd = CYCLE_TO_DIE;
+	ret->checks = 0;
+	ret->dump = -2;
+	ret->show = 0;
+	if (!init_arena(ret) /
+		|| !get_players(argc, argv, ret)\
+		|| !load_players(ret))
 		return (0);
 	return (1);
 }

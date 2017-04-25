@@ -2,15 +2,22 @@
 #include <corewar.h>
 #include <stdlib.h>
 
-WINDOW *create_newwin(int height, int width, int starty, int startx)
+void	box_put_arena(t_global  *all, WINDOW *box)
 {
-	WINDOW *local_win;
+	int		i;
+	int		x;
+	int		y;
 
-	local_win = newwin(height, width, starty, startx);
-	box(local_win, 0 , 0);		
-	wrefresh(local_win);
+	i = -1;
+	while (++i < MEM_SIZE)
+	{
+		x = i % TAB_WIDTH;
+		y = i / TAB_WIDTH;
+		wmove(box, y + 1, (x * 3) + 2);
+		wprintw(box, "%02x", all->arena[i]);
+	}
+	wrefresh(box);
 
-	return local_win;
 }
 
 int		main()
@@ -19,60 +26,37 @@ int		main()
 	WINDOW		*box;
 
 	all = (t_global*)malloc(sizeof(t_global));
-	all->arena= ft_memalloc(MEM_SIZE);
+	all->arena = ft_memalloc(MEM_SIZE);
+	all->arena[5] = 7;
+	all->arena[7] = 17;
+	all->arena[0] = 207;
 	initscr();
+	curs_set(0);
 	start_color();			/* Start color 			*/
-	init_pair(1, COLOR_RED, COLOR_BLACK);
 	refresh();
-	box = create_newwin(5, 5, 0, 0);
-	wbkgd(box,COLOR_PAIR(1));
+	init_pair(1, COLOR_GREEN, COLOR_BLACK);
+	init_pair(2, COLOR_BLACK, COLOR_GREEN);
+	init_pair(3, COLOR_RED, COLOR_BLACK);
+	init_pair(4, COLOR_BLACK, COLOR_RED);
+	init_pair(5, COLOR_BLUE, COLOR_BLACK);
+	init_pair(6, COLOR_BLACK, COLOR_BLUE);
+	init_pair(7, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(8, COLOR_BLACK, COLOR_YELLOW);
+	init_pair(9, COLOR_WHITE, COLOR_BLACK);
+	init_pair(10, COLOR_BLACK, COLOR_WHITE);
+	box = newwin(TAB_HEIGHT + 2, (TAB_WIDTH * 3) + 3, 0, 0);
+	box(box, 0, 0);
+
+	box_put_arena(all, box);
 	// attron(COLOR_PAIR(1));
-	printw("%d\n", 0);
-	printw("%d\n", 1);
-	printw("%d", 2);
+	// wmove(box, 1, 1);
+	// wprintw(box, "%d", 0);
+	// wprintw(box, "%d", 1);
+	// wprintw(box, "%d", 2);
+	// wrefresh(box);
 	// attroff(COLOR_PAIR(1));
-	printw("%d", 3);
-	printw("%d", 4);
-	move(4, 0);
-	printw("%d", 9);
 	getch();
 	delwin(box);
 	endwin();
 	return 0;
 }
-
-// int		main()
-// {
-// 	int ch;
-
-// 	initscr();			/* Start curses mode 		*/
-// 	raw();				/* Line buffering disabled	*/
-// 	keypad(stdscr, TRUE);		/* We get F1, F2 etc..		*/
-// 	noecho();			/* Don't echo() while we do getch */
-
-//     printw("Type any character to see it in bold\n");
-// 	while (ch = getch())
-// 	{			/* If raw() hadn't been called
-// 					 * we have to press enter before it
-// 					 * gets to the program 		*/
-// 	if(ch == KEY_F(2))
-// 	{		/* Without keypad enabled this will */
-// 		endwin();			/* End curses mode		  */
-// 		exit(0);
-// 		// printw("F1 Key pressed");/*  not get to us either	*/
-// 					/* Without noecho() some ugly escape
-// 					 * charachters might have been printed
-// 					 * on screen			*/
-// }
-// 	else
-// 	{	printw("The pressed key is ");
-// 		attron(A_BOLD);
-// 		printw("%c", ch);
-// 		attroff(A_BOLD);
-// 	refresh();			/* Print it on to the real screen */
-// 	}
-// 	}
-//     	// getch();			/* Wait for user input */
-// 	// endwin();			/* End curses mode		  */
-// 	return (0);
-// }

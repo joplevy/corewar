@@ -1,27 +1,23 @@
 #include "corewar.h"
 
-int				ft_strupcpy(char *arena, char *champion, int len_champion, int position)
+int				ft_strupcpy(unsigned char *arena, char *code, int len, int pos)
 {
 	int			i;
 
 	i = 0;
-	while (i <= len_champion)
+	while (i <= len)
 	{
-		arena[position + i] = champion[i];
+		arena[pos + i] = code[i];
 		++i;
 	}
 }
 
-static void 	put_player(t_player **player, t_global *gb, int nb_player)
+static void 	put_players(t_player **player, t_global *gb, int nb_players)
 {
 	int			i;
-	int			nb_players;
 	int			entry;
 	int			modulo;
 
-	nb_player = 0;
-	while ((gb->players)[nb_players] != NULL)
-		nb_players++;
 	entry = -1 * (MEM_SIZE  / nb_players);
 	modulo = MEM_SIZE % nb_players;
 	i = -1;
@@ -33,17 +29,18 @@ static void 	put_player(t_player **player, t_global *gb, int nb_player)
 			entry++;
 			modulo--;
 		}
-		ft_strupcpy(arena, player-code, player->end, entry);
+		ft_strupcpy(gb->arena, ((gb->players)[i])->code, \
+								((gb->players)[i])->size, entry);
 	}
 }
 
-static int		load_players(t_global *gb)
+int				load_players(t_global *gb)
 {
 	int			i;
 
 	i = 0;
-	while ((gb->player[i]) != NULL)
+	while ((gb->players)[i] != NULL)
 		i++;
-	put_player((t_player**)(gb->player), gb->arena, i);
+	put_players((t_player**)(gb->players), gb, i);
 	return (1);
 }
