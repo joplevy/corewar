@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/04/25 23:28:05 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/01 17:15:54 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct		s_player
 	int				id;
 	int				live;
 	int				size;
+	int				entry;
 	char			*name;
 	char			*comment;
 	char			*code;
@@ -54,6 +55,7 @@ typedef struct 		s_global
 	int				last_id;
 	int				ctd;
 	int				checks;
+	int				period;
 	int				dump;
 	int				show;
 }					t_global;
