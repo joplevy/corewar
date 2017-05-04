@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test_ncurses.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/05/02 21:02:48 by joeyplevy         #+#    #+#             */
+/*   Updated: 2017/05/04 23:23:31 by joeyplevy        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <ncurses.h>
 #include <corewar.h>
 #include <stdlib.h>
@@ -14,10 +26,24 @@ void	box_put_arena(t_global  *all, WINDOW *box)
 		x = i % TAB_WIDTH;
 		y = i / TAB_WIDTH;
 		wmove(box, y + 1, (x * 3) + 2);
+		wattron(box, COLOR_PAIR(all->col[i]));
 		wprintw(box, "%02x", all->arena[i]);
+		wattroff(box, COLOR_PAIR(all->col[i]));
 	}
 	wrefresh(box);
+}
 
+t_col	*color_init()
+{
+	t_col	*ret;
+	int		i;
+
+	if (!(ret = (ft_memalloc(MEM_SIZE * sizeof(t_col)))))
+		return (NULL);
+	i = -1;
+	while (++i < MEM_SIZE)
+		ret[i] = yellow_b;
+	return (ret);
 }
 
 int		main()
@@ -30,6 +56,7 @@ int		main()
 	all->arena[5] = 7;
 	all->arena[7] = 17;
 	all->arena[0] = 207;
+	all->col = color_init();
 	initscr();
 	curs_set(0);
 	start_color();			/* Start color 			*/
@@ -46,7 +73,6 @@ int		main()
 	init_pair(10, COLOR_BLACK, COLOR_WHITE);
 	box = newwin(TAB_HEIGHT + 2, (TAB_WIDTH * 3) + 3, 0, 0);
 	box(box, 0, 0);
-
 	box_put_arena(all, box);
 	// attron(COLOR_PAIR(1));
 	// wmove(box, 1, 1);
