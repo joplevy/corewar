@@ -6,7 +6,7 @@
 #    By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/06 14:23:18 by niludwig          #+#    #+#              #
-#    Updated: 2017/05/04 23:16:31 by joeyplevy        ###   ########.fr        #
+#    Updated: 2017/05/08 21:58:30 by joeyplevy        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = gcc
 CFLAG = -Wall -Werror -Wextra
 # ASMSRC = ./assembleur/src/main_asm.c ./include/op.c
 # ASMOBJ = $(ASMSRC:.c=.o)
-VMSRC = ./vm/test_ncurses.c ./include/op.c
+VMSRC = ./vm/main.c ./include/op.c ./vm/get_info.c ./vm/load_players.c
 VMOBJ = $(VMSRC:.c=.o)
 LIBFT_PATH = ./libft/libft/
 PRINTF_PATH = ./libft/
