@@ -93,7 +93,51 @@ static void get_arg(int ac, char **av, t_global *gb)
 	}
 	ft_printf("nb_player=%i\nnb_arg=%i\n", gb->nb_player, gb->nb_arg);
 	if (gb->nb_arg > 0)
-		;//a fair
+		;//a faire
+}
+
+int				get_player(t_global *global, int pid, char *file)
+{
+	int			fd;
+	int			i;
+
+	while ((global->players)[i] != NULL)
+		i++;
+	(global->players)[i + 1] = NULL;
+	if (((global->players)[i] = malloc(sizeof(t_player))) == NULL)
+		return (malloc_err());
+	((global->players)[i])->id = pid;
+	if (!get_player_info(fd, (global->players)[i]))
+	{
+		close(fd);
+		return (0);
+	}
+	close(fd);
+	return (1);
+}
+
+int			set_global(t_arg *args, t_global *global)
+{
+	t_arg	*a;
+
+	a = args;
+	while (tmp != NULL)
+	{
+		if (a->type == opt)
+		{
+			if (ft_streq(a->opt, "dump") && (a = a->next))
+				gb->dump = a->val;
+			else if (ft_streq(a->opt, "n"))
+				if (++(gb->nb_pl) > MAX_PLAYERS || !((a->next)->next)->fd || \
+					!get_player(gb, (a->next)->val, (a = (a->next)->next)->str))
+					return (0);
+		}
+		else if (!get_player(gb, 0, a->str))
+			return (0);
+		a = a->next;
+	}
+	set_players_id(gb);
+	load_players(gb);
 }
 
 int			main(int ac, char **av)
@@ -106,6 +150,7 @@ int			main(int ac, char **av)
 	if (!(global = init_global()))
 		return (0);
 	get_arg(ac, av, global);
+
 	if (nb_player > 1 || nb_player < 5)
 	{
 		while (i != global->nb_player + 1)

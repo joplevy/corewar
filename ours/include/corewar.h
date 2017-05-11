@@ -42,7 +42,7 @@ typedef struct		s_process
 	char			player;
 	int				carry;
 	int				live;
-	unsigned char	regs[REG_NUMBER][REG_SIZE];
+	int				regs[REG_NUMBER];
 	int				current;
 	int				cycles;
 	int				adress;
@@ -75,7 +75,7 @@ typedef struct 		s_global
 	int				dump;
 	int				show;
 	int				nb_arg;
-	int 			nb_player;
+	int 			nb_pl;
 }					t_global;
 
 int					get_info_player(int fd, t_player *player);
