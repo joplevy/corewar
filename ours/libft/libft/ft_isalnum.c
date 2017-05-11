@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niludwig <niludwig@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/08 05:45:49 by niludwig          #+#    #+#             */
-/*   Updated: 2016/11/08 06:04:53 by niludwig         ###   ########.fr       */
+/*   Updated: 2017/05/08 21:37:32 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_isalnum(int c)
+int	ft_isalnum(char c)
 {
 	if ((c > 47 && c < 58) || (c > 64 && c < 91) || (c > 96 && c < 123))
 		return (1);
