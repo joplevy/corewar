@@ -96,23 +96,25 @@ static void get_arg(int ac, char **av, t_global *gb)
 		;//a faire
 }
 
-int				get_player(t_global *global, int pid, char *file)
+int				get_player(t_global *global, int pid, t_arg arg)
 {
-	int			fd;
 	int			i;
 
+	if (arg->fd <= 0)
+		return(0);
+	//	return(open_error(arg));
 	while ((global->players)[i] != NULL)
 		i++;
 	(global->players)[i + 1] = NULL;
 	if (((global->players)[i] = malloc(sizeof(t_player))) == NULL)
 		return (malloc_err());
 	((global->players)[i])->id = pid;
-	if (!get_player_info(fd, (global->players)[i]))
+	if (!get_info_player(arg->fd, (global->players)[i]))
 	{
-		close(fd);
+		close(arg->fd);
 		return (0);
 	}
-	close(fd);
+	close(arg->fd);
 	return (1);
 }
 
@@ -128,11 +130,11 @@ int			set_global(t_arg *args, t_global *global)
 			if (ft_streq(a->opt, "dump") && (a = a->next))
 				gb->dump = a->val;
 			else if (ft_streq(a->opt, "n"))
-				if (++(gb->nb_pl) > MAX_PLAYERS || !((a->next)->next)->fd || \
-					!get_player(gb, (a->next)->val, (a = (a->next)->next)->str))
+				if (++(gb->nb_pl) > MAX_PLAYERS || \
+					!get_player(gb, (a->next)->val, (a = (a->next)->next)))
 					return (0);
 		}
-		else if (!get_player(gb, 0, a->str))
+		else if (!get_player(gb, 0, a))
 			return (0);
 		a = a->next;
 	}
@@ -143,37 +145,32 @@ int			set_global(t_arg *args, t_global *global)
 int			main(int ac, char **av)
 {
 	t_global	*global;
+	t_arg		*args;
 	int			fd;
 	int 		i;
 
 	i = 1;
 	if (!(global = init_global()))
 		return (0);
-	get_arg(ac, av, global);
-
-	if (nb_player > 1 || nb_player < 5)
+	ft_putendl("////init_global////");
+	if (!(args = ft_get_args(ac, av, global)))
+		return (0);
+	ft_putendl("////ft_get_args////");
+	if (!set_global(args, global))
+		return (0);
+	ft_putendl("////set_global////");
+	while (i != global->nb_pl + 1)
 	{
-		while (i != global->nb_player + 1)
-		{
-			if (!(fd = open((const char*)av[i], O_RDONLY)))
-				return (0);
-			if (!(get_info_player(fd, global->players[i - 1])))
-				ft_putendl("baaaa");
-			else
-			{
-				ft_putbinary(global->players[i - 1]->name, PROG_NAME_LENGTH);
-				ft_printf("\n\n");
-				ft_putbinary(global->players[i - 1]->comment, COMMENT_LENGTH);
-				ft_printf("\n\n");
-				ft_putbinary(global->players[i - 1]->code, global->players[i - 1]->size);
-				ft_printf("\n\n");
-			}
-			if (!(load_players(global->players[i - 1])))
-				ft_putendl("load_player");
-			++i;
-		}
-		if (!(load_players(global)))
-			ft_putendl("load_player");
+		ft_putbinary(global->players[i - 1]->name, PROG_NAME_LENGTH);
+		ft_printf("\n\n");
+		ft_putbinary(global->players[i - 1]->comment, COMMENT_LENGTH);
+		ft_printf("\n\n");
+		ft_putbinary(global->players[i - 1]->code, global->players[i - 1]->size);
+		ft_printf("\n\n");
 	}
+	/*
+	if (!(load_players(global)))
+			ft_putendl("load_player");
+	*/
 	return (0);
 }
