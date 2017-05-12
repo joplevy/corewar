@@ -78,6 +78,14 @@ typedef struct 		s_global
 	int 			nb_pl;
 }					t_global;
 
+static t_opt		opt_tab[4] = 
+{
+					{"p", "i"},
+					{"n", ""},
+					{"dump", "i"},
+					{"", ""}
+};
+
 int					get_info_player(int fd, t_player *player);
 void				ft_putbinary(char *str, int size);
 #endif

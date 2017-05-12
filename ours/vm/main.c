@@ -53,10 +53,11 @@ t_global	*init_global()
 	ret->dump = -2;
 	ret->show = 0;
 	ret->nb_arg = 0;
-	ret->nb_player = 0;
+	ret->nb_pl = 0;
 	return (ret);
 }
 
+/*
 static int 				get_poss(t_global *gb)
 {
 	int possition;
@@ -95,8 +96,51 @@ static void get_arg(int ac, char **av, t_global *gb)
 	if (gb->nb_arg > 0)
 		;//a faire
 }
+*/
 
-int				get_player(t_global *global, int pid, t_arg arg)
+static int		check_double(t_player **players)
+{
+	int			i;
+	int			j;
+
+	i = -1;
+	while (players[++i] != NULL)
+	{
+		j = i;
+		while ((players[i])->id != 0 && players[++j] != NULL)
+			if ((players[j])->id == (players[i])->id \
+				|| (players[i])->id > MAX_PLAYERS)
+				return (0);
+	}
+	return (1);
+}
+
+int				set_players_id(t_player **players)
+{
+	int			i;
+	int			j;
+	int			pid;
+
+	if (!check_double(players))
+		return (0);
+	i = -1;
+	pid = 1;
+	while (players[++i] != NULL)
+		if (!(players[i])->id)
+		{
+			j = -1;
+			while (players[++j] != NULL)
+				if (i != j && (players[j])->id == pid)
+				{
+					pid++;
+					j = -1;
+				}
+			(players[i])->id = pid;
+		}
+	return (1);
+}
+
+int				get_player(t_global *global, int pid, t_parg arg)
 {
 	int			i;
 
@@ -118,7 +162,7 @@ int				get_player(t_global *global, int pid, t_arg arg)
 	return (1);
 }
 
-int			set_global(t_arg *args, t_global *global)
+int			set_global(t_parg *args, t_global *global)
 {
 	t_arg	*a;
 
@@ -130,22 +174,25 @@ int			set_global(t_arg *args, t_global *global)
 			if (ft_streq(a->opt, "dump") && (a = a->next))
 				gb->dump = a->val;
 			else if (ft_streq(a->opt, "n"))
-				if (++(gb->nb_pl) > MAX_PLAYERS || \
-					!get_player(gb, (a->next)->val, (a = (a->next)->next)))
-					return (0);
+				gb->show = 1;
+			else if (ft_strcmp(a->opt, "p") || ++(gb->nb_pl) > MAX_PLAYERS || \
+						!get_player(gb, (a->next)->val, (a = (a->next)->next)))
+				return (0);
 		}
 		else if (!get_player(gb, 0, a))
 			return (0);
 		a = a->next;
 	}
-	set_players_id(gb);
-	load_players(gb);
+	if (!set_players_id((t_players**)gb->players)) 
+	//	|| !load_players(gb))
+		return (0);
+	return (1);
 }
 
 int			main(int ac, char **av)
 {
 	t_global	*global;
-	t_arg		*args;
+	t_parg		*args;
 	int			fd;
 	int 		i;
 
@@ -153,7 +200,7 @@ int			main(int ac, char **av)
 	if (!(global = init_global()))
 		return (0);
 	ft_putendl("////init_global////");
-	if (!(args = ft_get_args(ac, av, global)))
+	if (!(args = ft_get_args(ac, av, opt_tab, f)))
 		return (0);
 	ft_putendl("////ft_get_args////");
 	if (!set_global(args, global))

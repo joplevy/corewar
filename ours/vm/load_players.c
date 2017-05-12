@@ -49,10 +49,6 @@ int		put_players(t_global *gb, int nb_players)
 	return (1);
 }
 
-
-/*
-** desapprouve par moi (je t'apprendrais a utiliser les fonctions de listes de la lib)
-*/
 // int				intit_new_proc(t_player *pl, t_list **list)
 // {
 // 	t_list		*new;
