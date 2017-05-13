@@ -55,7 +55,7 @@ typedef struct		s_player
 	int				id;
 	int				live;
 	int				size;
-	int				entry;
+	int				pos;
 	char			name[PROG_NAME_LENGTH];
 	char			comment[COMMENT_LENGTH];
 	char			code[CHAMP_MAX_SIZE];
@@ -79,14 +79,9 @@ typedef struct 		s_global
 	int 			nb_pl;
 }					t_global;
 
-static t_opt		opt_tab[4] = 
-{
-					{"p", "i"},
-					{"n", ""},
-					{"dump", "i"},
-					{"", ""}
-};
-
 int					get_info_player(int fd, t_player *player);
 void				ft_putbinary(char *str, int size);
+int					set_global(t_list *args, t_global *gb);
+int					load_players(t_global *gb);
+
 #endif

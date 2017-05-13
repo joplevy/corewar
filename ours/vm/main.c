@@ -32,7 +32,11 @@ void		ft_putbinary(char *str, int size)
 
 	i = -1;
 	while (++i < size)
+	{
 		printf("%02x ", str[i] & 0xFF);
+		if (!((i + 1) % 32))
+			printf("\n");
+	}
 }
 
 t_global	*init_global()
@@ -99,105 +103,69 @@ static void get_arg(int ac, char **av, t_global *gb)
 		;//a faire
 }
 */
-
-static int		check_double(t_player **players)
+t_opt		*opt_tab(void)
 {
-	int			i;
-	int			j;
+	t_opt		*ret;
 
+	if ((ret = (t_opt*)malloc(sizeof(t_opt) * 4)) == NULL)
+		return (NULL);
+	(ret[0]).name = "p";
+	(ret[0]).args = "if";
+	(ret[1]).name = "n";
+	(ret[1]).args =  "";
+	(ret[2]).name = "dump";
+	(ret[2]).args = "i";
+	(ret[3]).name = "";
+	(ret[3]).args = "";
+	return (ret);
+}
+
+int				init_new_proc(t_player *player, t_list **procs)
+{
+	t_process	proc;
+	t_list		new;
+	int			i;
+
+	proc.player = player->id;
+	proc.carry = 0;
+	proc.live = 0;
+	proc.cycles = 0;
+	proc.adress = player->pos;
 	i = -1;
-	while (players[++i] != NULL)
-	{
-		j = i;
-		while ((players[i])->id != 0 && players[++j] != NULL)
-			if ((players[j])->id == (players[i])->id \
-				|| (players[i])->id > MAX_PLAYERS)
-				return (0);
-	}
+	while (++i < REG_NUMBER)
+		(proc.regs)[i] = 0;
+	if (!(new = ft_lstnew(proc, sizeof(t_process))))
+		return (0);
+	ft_lstadd(procs, new);
 	return (1);
 }
 
-int				set_players_id(t_player **players)
+int				load_players(t_global *gb)
 {
 	int			i;
-	int			j;
-	int			pid;
+	int			pos;
+	int			modulo;
 
-	if (!check_double(players))
-		return (0);
+	pos = -1 * (MEM_SIZE  / gb->nb_pl);
+	modulo = MEM_SIZE % gb->nb_pl;
 	i = -1;
-	pid = 1;
-	while (players[++i] != NULL)
-		if (!(players[i])->id)
+	while (++i < gb->nb_pl)
+	{
+		pos += (MEM_SIZE / gb->nb_pl);
+		if (modulo && pos)
 		{
-			j = -1;
-			while (players[++j] != NULL)
-				if (i != j && (players[j])->id == pid)
-				{
-					pid++;
-					j = -1;
-				}
-			(players[i])->id = pid;
+			pos++;
+			modulo--;
 		}
-	return (1);
-}
-
-int				get_player(t_global *global, int pid, t_list *list)
-{
-	int			i;
-	t_parg		*arg;
-
-	arg = (t_parg*)(list->content);
-	if (arg->fd <= 0)
-		return(0);
-	//	return(open_error(arg));
-	i = 0;
-	while ((global->players)[i] != NULL)
-		i++;
-	if (((global->players)[i] = malloc(sizeof(t_player))) == NULL)
-	{
-		close(arg->fd);
-		return (0);
+		ft_memcpy((void*)(gb->arena) + pos, \
+					(const void*)((gb->players)[i])->code, \
+					(size_t)((gb->players)[i])->size);
 	}
-	//	return (malloc_err());
-	((global->players)[i])->id = pid;
-	if (!get_info_player(arg->fd, (global->players)[i]))
-	{
-		close(arg->fd);
-		return (0);
-	}
-	close(arg->fd);
-	return (1);
-}
-
-int			set_global(t_list *args, t_global *gb)
-{
-	t_list	*a;
-
-	a = args;
-	while (a != NULL)
-	{
-		if (((t_parg*)(a->content))->type == opt)
-		{
-			if (ft_strequ(((t_parg*)a->content)->opt, "dump") && (a = a->next))
-				gb->dump = ((t_parg*)a->content)->val;
-			else if (ft_strequ(((t_parg*)a->content)->opt, "n"))
-				gb->show = 1;
-			else if (ft_strcmp(((t_parg*)a->content)->opt, "p") || \
-					++(gb->nb_pl) > MAX_PLAYERS || !get_player(gb, \
-					((t_parg*)(a->next->content))->val, a->next->next))
-				return (0);
-			if (ft_strequ(((t_parg*)a->content)->opt, "p"))
-				a = a->next->next;
-		}
-		else if (++(gb->nb_pl) > MAX_PLAYERS || !get_player(gb, 0, a))
-			return (0);
-		a = a->next;
-	}
-	if (!set_players_id((t_player**)gb->players)) 
-	//	|| !load_players(gb))
-		return (0);
-	return (1);
+ //		i = -1;
+ // 	while ((gb->players)[++i] != NULL)
+ // 		if (!intit_new_proc((gb->players)[i], &(gb->procs)))
+ // 			return (0);
+ 	return (1);
 }
 
 int			main(int ac, char **av)
@@ -205,12 +173,15 @@ int			main(int ac, char **av)
 	t_global	*global;
 	t_list		*args;
 	int 		i;
+	t_opt		*tab;
 
+	tab = opt_tab();
 	if (!(global = init_global()))
 		return (0);
 	ft_putendl("////init_global////");
-	if (!(args = ft_get_args(ac, av, opt_tab, 'f')))
+	if (!(args = ft_get_args(ac, av, tab, 'f')))
 		return (0);
+	free(tab);
 	ft_putendl("////ft_get_args////");
 	if (!set_global(args, global))
 		return (0);
@@ -226,6 +197,8 @@ int			main(int ac, char **av)
 		ft_putbinary(global->players[i]->code, global->players[i]->size);
 		printf("\n\n");
 	}
+	printf("\nARENA:\n\n");
+	ft_putbinary((char*)global->arena, MEM_SIZE);
 	/*
 	if (!(load_players(global)))
 			ft_putendl("load_player");
