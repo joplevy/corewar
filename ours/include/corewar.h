@@ -6,13 +6,14 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/10 04:49:27 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/12 20:17:22 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COREWAR_H
 # define COREWAR_H
 # include <errno.h>
+# include <unistd.h>
 # include <limits.h>
 # include <fcntl.h>
 # include <libft.h>
