@@ -6,13 +6,14 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/11 15:52:42 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/13 15:35:22 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
+#include <stdio.h>
 
-static void		ft_uputbinary(unsigned char *str, int size)
+void		ft_uputbinary(unsigned char *str, int size)
 {
 	int		i;
 	char *strr;
@@ -20,7 +21,7 @@ static void		ft_uputbinary(unsigned char *str, int size)
 	i = -1;
 	strr = (char*)str;
 	while (++i < size)
-		printf("%02x ", strr[i] & 0xFF);
+		ft_printf("%02x ", str[i] & 0xFF);
 }
 
 void		ft_putbinary(char *str, int size)
@@ -57,26 +58,26 @@ t_global	*init_global()
 	return (ret);
 }
 
-static int 				get_poss(t_global *gb)
-{
-	int possition;
+// static int 				get_poss(t_global *gb)
+// {
+// 	int possition;
 
-	possition = gb->nb_arg;
-	//recuperation des possition
-	return (possition);
-}
+// 	possition = gb->nb_arg;
+// 	//recuperation des possition
+// 	return (possition);
+// }
 
-static int				load_players(t_player *player)
-{
-	int i;
-	int pos;
+// static int				load_players(t_player *player)
+// {
+// 	int i;
+// 	int pos;
 
-	i = 0;
-	pos = get_poss(gb);
-	ft_memcpy(gb->arena + pos, player->code, CHAMP_MAX_SIZE);
-	ft_uputbinary(gb->arena, MEM_SIZE);
-	return (1);
-}
+// 	i = 0;
+// 	pos = get_poss(gb);
+// 	ft_memcpy(gb->arena + pos, player->code, CHAMP_MAX_SIZE);
+// 	ft_uputbinary(gb->arena, MEM_SIZE);
+// 	return (1);
+// }
 
 static void get_arg(int ac, char **av, t_global *gb)
 {
@@ -92,8 +93,8 @@ static void get_arg(int ac, char **av, t_global *gb)
 		i++;
 	}
 	ft_printf("nb_player=%i\nnb_arg=%i\n", gb->nb_player, gb->nb_arg);
-	if (gb->nb_arg > 0)
-		;//a fair
+	// if (gb->nb_arg > 0)
+	// 	;//a fair
 }
 
 int			main(int ac, char **av)
@@ -101,12 +102,13 @@ int			main(int ac, char **av)
 	t_global	*global;
 	int			fd;
 	int 		i;
+	int 		pos;
 
 	i = 1;
 	if (!(global = init_global()))
 		return (0);
 	get_arg(ac, av, global);
-	if (nb_player > 1 || nb_player < 5)
+	if (global->nb_player > 1 && global->nb_player < 5)
 	{
 		while (i != global->nb_player + 1)
 		{
@@ -114,21 +116,26 @@ int			main(int ac, char **av)
 				return (0);
 			if (!(get_info_player(fd, global->players[i - 1])))
 				ft_putendl("baaaa");
-			else
-			{
-				ft_putbinary(global->players[i - 1]->name, PROG_NAME_LENGTH);
-				ft_printf("\n\n");
-				ft_putbinary(global->players[i - 1]->comment, COMMENT_LENGTH);
-				ft_printf("\n\n");
-				ft_putbinary(global->players[i - 1]->code, global->players[i - 1]->size);
-				ft_printf("\n\n");
-			}
-			if (!(load_players(global->players[i - 1])))
-				ft_putendl("load_player");
+			// else
+			// {
+			// 	ft_putbinary(global->players[i - 1]->name, PROG_NAME_LENGTH);
+			// 	ft_printf("\n\n");
+			// 	ft_putbinary(global->players[i - 1]->comment, COMMENT_LENGTH);
+			// 	ft_printf("\n\n");
+			// 	ft_putbinary(global->players[i - 1]->code, global->players[i - 1]->size);
+			// 	ft_printf("\n\n");
+			// }
+			pos = (i - 1) * (MEM_SIZE / global->nb_player);
+			ft_memcpy(global->arena + pos, global->players[i - 1]->code, CHAMP_MAX_SIZE);
+			// if (!(load_players(global->players[i - 1])))
+			// 	ft_putendl("load_player");
+
 			++i;
 		}
-		if (!(load_players(global)))
-			ft_putendl("load_player");
+		ft_uputbinary(global->arena, MEM_SIZE);
+		ft_printf("\n");
+		// if (!(load_players(global)))
+		// 	ft_putendl("load_player");
 	}
 	return (0);
 }

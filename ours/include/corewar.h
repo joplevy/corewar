@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/10 04:49:27 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/12 15:47:10 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 # define COREWAR_H
 # include <errno.h>
 # include <limits.h>
+# include <unistd.h>
 # include <fcntl.h>
+# include <stdlib.h>
 # include <libft.h>
 # include <op.h>
-# include <ft_printf.h>
 # define ACC(NODE, ELEM) (((t_process*)((NODE)->content))->(ELEM))
 // ACC("t_process*", glob->procs, "carry");
 # define TAB_HEIGHT 64
@@ -80,4 +81,5 @@ typedef struct 		s_global
 
 int					get_info_player(int fd, t_player *player);
 void				ft_putbinary(char *str, int size);
+void				ft_uputbinary(unsigned char *str, int size);
 #endif
