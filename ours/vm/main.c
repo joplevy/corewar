@@ -123,7 +123,7 @@ t_opt		*opt_tab(void)
 int				init_new_proc(t_player *player, t_list **procs)
 {
 	t_process	proc;
-	t_list		new;
+	t_list		*new;
 	int			i;
 
 	proc.player = player->id;
@@ -134,7 +134,7 @@ int				init_new_proc(t_player *player, t_list **procs)
 	i = -1;
 	while (++i < REG_NUMBER)
 		(proc.regs)[i] = 0;
-	if (!(new = ft_lstnew(proc, sizeof(t_process))))
+	if (!(new = ft_lstnew((void*)(&proc), sizeof(t_process))))
 		return (0);
 	ft_lstadd(procs, new);
 	return (1);
@@ -161,11 +161,29 @@ int				load_players(t_global *gb)
 					(const void*)((gb->players)[i])->code, \
 					(size_t)((gb->players)[i])->size);
 	}
- //		i = -1;
- // 	while ((gb->players)[++i] != NULL)
- // 		if (!intit_new_proc((gb->players)[i], &(gb->procs)))
- // 			return (0);
+ 	i = -1;
+  	while ((gb->players)[++i] != NULL)
+  		if (!init_new_proc((gb->players)[i], &(gb->procs)))
+  			return (0);
  	return (1);
+}
+
+void		print_proclist(t_list *procs)
+{
+	t_list		*tmp;
+	
+	tmp = procs;
+	while (tmp != NULL)
+	{
+		printf("player: %d\n", ((t_process*)(tmp->content))->player);
+		printf("carry: %d\n", ((t_process*)(tmp->content))->carry);
+		printf("cycles: %d\n", ((t_process*)(tmp->content))->cycles);
+		printf("live: %d\n", ((t_process*)(tmp->content))->live);
+		printf("adress: %d\n", ((t_process*)(tmp->content))->adress);
+		printf("|\n");
+		tmp = tmp->next;
+	}
+	printf("NULL\n");
 }
 
 int			main(int ac, char **av)
@@ -199,9 +217,6 @@ int			main(int ac, char **av)
 	}
 	printf("\nARENA:\n\n");
 	ft_putbinary((char*)global->arena, MEM_SIZE);
-	/*
-	if (!(load_players(global)))
-			ft_putendl("load_player");
-	*/
+	print_proclist(global->procs);
 	return (0);
 }
