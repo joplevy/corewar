@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/23 18:31:24 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/23 18:56:45 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,7 @@ int					get_info_player(int fd, t_player *player);
 **		affichage.c
 */
 
-WINDOW				*init_ncurses();
-t_col				*color_init();
+void				init_ncurses(t_global *all);
 void				end_ncurses(WINDOW *box);
 void				box_put_arena(t_global  *all);
 void				ft_putbinary(char *str, int size);

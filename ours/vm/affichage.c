@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/14 14:12:41 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/23 18:27:44 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/23 19:30:36 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,30 @@ void	end_ncurses(WINDOW *box)
 	endwin();
 }
 
-t_col	*color_init()
+void		color_init(t_global *all)
 {
-	t_col	*ret;
 	int		i;
+	int		mnp;
+	int		imnp;
 
-	if (!(ret = (ft_memalloc(MEM_SIZE * sizeof(t_col)))))
-		return (NULL);
+	if (!(all->col = (ft_memalloc(MEM_SIZE * sizeof(t_col)))))
+		return;
 	i = -1;
 	while (++i < MEM_SIZE)
-		ret[i] = white_b;
-	return (ret);
+	{
+		mnp = MEM_SIZE / all->nb_pl;
+		imnp = i / mnp;
+		if (i > imnp * mnp && i < imnp * mnp + all->players[imnp]->size)
+			all->col[i] = (imnp * 2) + 1;
+		else
+			all->col[i] = white_b;
+	}
 }
 
-WINDOW		*init_ncurses()
+void		init_ncurses(t_global *all)
 {
-	WINDOW		*box;
 
+	color_init(all);
 	initscr();
 	curs_set(0);
 	refresh();
@@ -69,9 +76,8 @@ WINDOW		*init_ncurses()
 	init_pair(8, COLOR_BLACK, COLOR_YELLOW);
 	init_pair(9, COLOR_WHITE, COLOR_BLACK);
 	init_pair(10, COLOR_BLACK, COLOR_WHITE);
-	box = newwin(TAB_HEIGHT + 2, (TAB_WIDTH * 3) + 3, 0, 0);
-	box(box, 0, 0);
-	return (box);
+	all->box = newwin(TAB_HEIGHT + 2, (TAB_WIDTH * 3) + 3, 0, 0);
+	box(all->box, 0, 0);
 }
 
 void		ft_putbinary(char *str, int size)

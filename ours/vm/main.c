@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/23 18:36:57 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/23 19:16:42 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,7 @@ int			main(int ac, char **av)
 		return (0);
 	if (global->show == 1)
 	{
-		global->col = color_init();
-		global->box = init_ncurses();
+		init_ncurses(global);
 		box_put_arena(global);
 		end_ncurses(global->box);
 	}
