@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_ncurses.c                                     :+:      :+:    :+:   */
+/*   affichage.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/02 21:02:48 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/13 18:16:13 by joeyplevy        ###   ########.fr       */
+/*   Created: 2017/05/14 14:12:41 by joeyplevy         #+#    #+#             */
+/*   Updated: 2017/05/23 19:30:36 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ncurses.h>
 #include <corewar.h>
-#include <stdlib.h>
 
-void	box_put_arena(t_global  *all, WINDOW *box)
+void	box_put_arena(t_global  *all)
 {
 	int		i;
 	int		x;
@@ -25,42 +23,49 @@ void	box_put_arena(t_global  *all, WINDOW *box)
 	{
 		x = i % TAB_WIDTH;
 		y = i / TAB_WIDTH;
-		wmove(box, y + 1, (x * 3) + 2);
-		wattron(box, COLOR_PAIR(all->col[i]));
-		wprintw(box, "%02x", all->arena[i]);
-		wattroff(box, COLOR_PAIR(all->col[i]));
+		wmove(all->box, y + 1, (x * 3) + 2);
+		wattron(all->box, COLOR_PAIR(all->col[i]));
+		wprintw(all->box, "%02x", all->arena[i]);
+		wattroff(all->box, COLOR_PAIR(all->col[i]));
 	}
-	wrefresh(box);
+	wrefresh(all->box);
 }
 
-t_col	*color_init()
+void	end_ncurses(WINDOW *box)
 {
-	t_col	*ret;
-	int		i;
+	getch();
+	delwin(box);
+	endwin();
+}
 
-	if (!(ret = (ft_memalloc(MEM_SIZE * sizeof(t_col)))))
-		return (NULL);
+void		color_init(t_global *all)
+{
+	int		i;
+	int		mnp;
+	int		imnp;
+
+	if (!(all->col = (ft_memalloc(MEM_SIZE * sizeof(t_col)))))
+		return;
 	i = -1;
 	while (++i < MEM_SIZE)
-		ret[i] = yellow_b;
-	return (ret);
+	{
+		mnp = MEM_SIZE / all->nb_pl;
+		imnp = i / mnp;
+		if (i > imnp * mnp && i < imnp * mnp + all->players[imnp]->size)
+			all->col[i] = (imnp * 2) + 1;
+		else
+			all->col[i] = white_b;
+	}
 }
 
-int		main()
+void		init_ncurses(t_global *all)
 {
-	t_global	*all;
-	WINDOW		*box;
 
-	all = (t_global*)malloc(sizeof(t_global));
-	all->arena = ft_memalloc(MEM_SIZE);
-	all->arena[5] = 7;
-	all->arena[7] = 17;
-	all->arena[0] = 207;
-	all->col = color_init();
+	color_init(all);
 	initscr();
 	curs_set(0);
 	refresh();
-	start_color();			/* Start color 			*/
+	start_color();
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	init_pair(2, COLOR_BLACK, COLOR_GREEN);
 	init_pair(3, COLOR_RED, COLOR_BLACK);
@@ -71,18 +76,19 @@ int		main()
 	init_pair(8, COLOR_BLACK, COLOR_YELLOW);
 	init_pair(9, COLOR_WHITE, COLOR_BLACK);
 	init_pair(10, COLOR_BLACK, COLOR_WHITE);
-	box = newwin(TAB_HEIGHT + 2, (TAB_WIDTH * 3) + 3, 0, 0);
-	box(box, 0, 0);
-	box_put_arena(all, box);
-	// attron(COLOR_PAIR(1));
-	// wmove(box, 1, 1);
-	// wprintw(box, "%d", 0);
-	// wprintw(box, "%d", 1);
-	// wprintw(box, "%d", 2);
-	// wrefresh(box);
-	// attroff(COLOR_PAIR(1));
-	getch();
-	delwin(box);
-	endwin();
-	return 0;
+	all->box = newwin(TAB_HEIGHT + 2, (TAB_WIDTH * 3) + 3, 0, 0);
+	box(all->box, 0, 0);
+}
+
+void		ft_putbinary(char *str, int size)
+{
+	int		i;
+
+	i = -1;
+	while (++i < size)
+	{
+		ft_printf("%02x ", str[i] & 0xFF);
+		if (i + 1 % TAB_WIDTH == 0)
+			ft_putchar('\n');
+	}
 }

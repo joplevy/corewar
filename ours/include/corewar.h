@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/12 15:47:10 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/23 18:56:45 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <limits.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <ncurses.h>
 # include <stdlib.h>
 # include <libft.h>
 # include <op.h>
@@ -68,6 +69,7 @@ typedef struct 		s_global
 	t_player		*players[MAX_PLAYERS + 1];
 	unsigned char	*arena;
 	t_col			*col;
+	WINDOW			*box;
 	int				lives;
 	int				last_id;
 	int				ctd;
@@ -76,10 +78,37 @@ typedef struct 		s_global
 	int				dump;
 	int				show;
 	int				nb_arg;
-	int 			nb_player;
+	int 			nb_pl;
 }					t_global;
 
+/*
+**	vm
+*/
+/*
+**		get_info.c
+*/
+
 int					get_info_player(int fd, t_player *player);
+
+/*
+**		affichage.c
+*/
+
+void				init_ncurses(t_global *all);
+void				end_ncurses(WINDOW *box);
+void				box_put_arena(t_global  *all);
 void				ft_putbinary(char *str, int size);
-void				ft_uputbinary(unsigned char *str, int size);
+
+/*
+**		set_global.c
+*/
+
+int					set_global(t_list *args, t_global *gb);
+
+/*
+**		load_player.c
+*/
+
+int					load_players(t_global *gb);
+
 #endif
