@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/14 14:12:41 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/23 19:30:36 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/25 20:56:28 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,21 @@ void	end_ncurses(WINDOW *box)
 void		color_init(t_global *all)
 {
 	int		i;
+	int		p;
 	int		mnp;
 	int		imnp;
 
 	if (!(all->col = (ft_memalloc(MEM_SIZE * sizeof(t_col)))))
 		return;
 	i = -1;
+	mnp = MEM_SIZE / all->nb_pl;
 	while (++i < MEM_SIZE)
 	{
-		mnp = MEM_SIZE / all->nb_pl;
 		imnp = i / mnp;
-		if (i > imnp * mnp && i < imnp * mnp + all->players[imnp]->size)
-			all->col[i] = (imnp * 2) + 1;
+		p = (i == imnp * mnp) ? 2 : 1;
+		if (imnp < all->nb_pl && \
+			i >= imnp * mnp && i < imnp * mnp + all->players[imnp]->size)
+			all->col[i] = (imnp * 2) + p;
 		else
 			all->col[i] = white_b;
 	}

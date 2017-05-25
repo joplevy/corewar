@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/23 18:56:45 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/25 21:40:11 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <stdlib.h>
 # include <libft.h>
 # include <op.h>
-# define ACC(NODE, ELEM) (((t_process*)((NODE)->content))->(ELEM))
-// ACC("t_process*", glob->procs, "carry");
+# define ADR(NODE) (((t_process*)((NODE)->content))->adress)
+# define PAR(NODE) (((t_process*)((NODE)->content))->params)
 # define TAB_HEIGHT 64
 # define TAB_WIDTH 64
 
@@ -41,7 +41,6 @@ typedef enum	e_col
 
 typedef struct		s_process
 {
-	char			player;
 	int				carry;
 	int				live;
 	unsigned char	regs[REG_NUMBER][REG_SIZE];

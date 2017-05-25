@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/23 19:16:42 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/25 21:41:18 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,28 @@ t_global	*init_global()
 	return (ret);
 }
 
+int				init_new_proc(t_list **procs, int pos)
+{
+	t_process	proc;
+	t_list		*new;
+	int			i;
+	int			j;
+
+	proc.carry = 0;
+	proc.live = 0;
+	proc.cycles = 0;
+	proc.adress = pos;
+	i = -1;
+	j = -1;
+	while (++i < REG_NUMBER)
+		while (++j < REG_SIZE)
+			(proc.regs)[i][j] = 0;
+	if (!(new = ft_lstnew(&proc, sizeof(t_process))))
+		return (0);
+	ft_lstadd(procs, new);
+	return (1);
+}
+
 int				load_players(t_global *gb)
 {
 	int			i;
@@ -66,19 +88,12 @@ int				load_players(t_global *gb)
 	while (++i < gb->nb_pl)
 	{
 		pos += (MEM_SIZE / gb->nb_pl);
-		if (modulo && pos)
-		{
-			pos++;
-			modulo--;
-		}
 		ft_memcpy((void*)(gb->arena + pos), \
 					(const void*)((gb->players)[i])->code, \
 					(size_t)((gb->players)[i])->size);
+		if (!init_new_proc(&(gb->procs), pos))
+			return (0);
 	}
- //		i = -1;
- // 	while ((gb->players)[++i] != NULL)
- // 		if (!intit_new_proc((gb->players)[i], &(gb->procs)))
- // 			return (0);
  	return (1);
 }
 
@@ -86,6 +101,7 @@ int			main(int ac, char **av)
 {
 	t_global	*global;
 	t_list		*args;
+	t_list		*tmp;
 	t_opt		*tab;
 
 	tab = opt_tab();
@@ -96,6 +112,8 @@ int			main(int ac, char **av)
 	free(tab);
 	if (!set_global(args, global))
 		return (0);
+	tmp = global->procs;
+
 	if (global->show == 1)
 	{
 		init_ncurses(global);
