@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/25 21:40:11 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/25 21:47:26 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,11 @@ void				ft_putbinary(char *str, int size);
 int					set_global(t_list *args, t_global *gb);
 
 /*
-**		load_player.c
+**		init.c
 */
 
 int					load_players(t_global *gb);
-
+int					init_new_proc(t_list **procs, int pos);
+t_global			*init_global();
+t_opt				*opt_tab(void);
 #endif
