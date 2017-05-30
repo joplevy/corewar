@@ -6,7 +6,9 @@ int			get_type_size(t_vmtype type)
 		return (IND_SIZE);
 	if (type == dir)
 		return (DIR_SIZE);
-	return (REG_SIZE);
+	if (type == reg)
+		return (REG_SIZE);
+	return (0);
 }
 
 t_vmtype	get_type(unsigned char ocp, int	pos)
@@ -18,12 +20,12 @@ t_vmtype	get_type(unsigned char ocp, int	pos)
 		return (dir);
 	if (ocp & 0x03 == REG_CODE)
 		return (reg);
-	return (-1);
+	return (!ocp ? tnul : terr);
 }
 
-int			get_params_length(int adress, unsigned char *arena)
+int			get_params_length(int adr, unsigned char *arena)
 {
-	unsigned char	opcode;
+	unsigned char	opc;
 	unsigned char	ocp;
 	int				i;
 	int				ret;
@@ -31,18 +33,17 @@ int			get_params_length(int adress, unsigned char *arena)
 
 	ret = 0;
 	ocp = 0;
-	opcode = *(arena + adress);
-	if (opcode < 1 || opcode > 16)
+	if (adr < 0 || adr >= MEM_SIZE || (opc =  *(arena + adr)) < 1 || opc > 16)
 		return (ret);
 	if (!OP_OCP((int)opcode))
-		return (def_op_size((int)opcode));
-	ocp = *(arena + adress + 1);
+		return (DIR_SIZE);
+	ocp = *(arena + (adr + 1 == MEM_SIZE ? 0 : adr + 1));
 	i = -1;
 	while (++i < OP_NBP((int)opcode))
 	{
-		if ((t = get_type(ocp, i)) < 0)
+		if ((t = get_type(ocp, i)) == terr)
 			return (0);
 		ret += get_type_size(t);
 	}
-	return (ret);
+	return (ret + 1);
 }
