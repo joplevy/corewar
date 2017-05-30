@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/25 21:47:26 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/30 20:11:40 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,22 @@
 # include <stdlib.h>
 # include <libft.h>
 # include <op.h>
+
 # define ADR(NODE) (((t_process*)((NODE)->content))->adress)
-# define PAR(NODE) (((t_process*)((NODE)->content))->params)
+# define OPC(NODE) (((t_process*)((NODE)->content))->opc)
+# define TIME(NODE) (((t_process*)((NODE)->content))->time)
+# define CARRY(NODE) (((t_process*)((NODE)->content))->carry)
+# define LIVE(NODE) (((t_process*)((NODE)->content))->live)
+# define REG(NODE) (((t_process*)((NODE)->content))->reg)
+
+# define OP_NAME(OP) (g_op_tab[OP - 1].name)
+# define OP_NBP(OP) (g_op_tab[OP - 1].nb_param)
+# define OP_PAR(OP) (g_op_tab[OP - 1].param)
+# define OP_NBC(OP) (g_op_tab[OP - 1].nb_cycles)
+# define OP_DESC(OP) (g_op_tab[OP - 1].description)
+# define OP_OCP(OP) (g_op_tab[OP - 1].ocp)
+# define OP_LAB(OP) (g_op_tab[OP - 1].label_size)
+
 # define TAB_HEIGHT 64
 # define TAB_WIDTH 64
 
@@ -43,11 +57,10 @@ typedef struct		s_process
 {
 	int				carry;
 	int				live;
+	unsigned char	opc;
 	unsigned char	regs[REG_NUMBER][REG_SIZE];
-	int				current;
-	int				cycles;
+	int				time;
 	int				adress;
-	int				params;
 }					t_process;
 
 typedef struct		s_player
@@ -73,10 +86,8 @@ typedef struct 		s_global
 	int				last_id;
 	int				ctd;
 	int				checks;
-	int				period;
 	int				dump;
 	int				show;
-	int				nb_arg;
 	int 			nb_pl;
 }					t_global;
 
@@ -109,7 +120,7 @@ int					set_global(t_list *args, t_global *gb);
 */
 
 int					load_players(t_global *gb);
-int					init_new_proc(t_list **procs, int pos);
+int					init_new_proc(t_global *gb, int pos);
 t_global			*init_global();
 t_opt				*opt_tab(void);
 #endif
