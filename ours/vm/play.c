@@ -12,7 +12,7 @@
 
 #include "corewar.h"
 
-void			check_lives(t_global *global, int *cycles)
+void			check_lives(t_global *global)
 {
 	t_list		*tmp;
 	t_list		*next;
@@ -23,14 +23,14 @@ void			check_lives(t_global *global, int *cycles)
 		next = tmp->next;
 		if (!LIVE(tmp))
 			delete_process(global->procs, tmp);
-		LIVE(tmp) = 0;
+		else
+			LIVE(tmp) = 0;
 		tmp = next;
 	}
 	if (global->lives > NBR_LIVE || global->checks == MAX_CHECKS)
 	{
 		global->ctd -= CYCLE_DELTA;
 		global->checks = 0;
-		*cycles = 0;
 	}
 	else
 		global->checks += 1;
@@ -65,7 +65,7 @@ void			play(t_global *global)
 		global->period += 1;
 		treat_all_procs(global);
 		if (global->period == global->ctd)
-			check_lives(global, &cycles);
+			check_lives(global);
 	}
 	if (global->dump > 0)
 		dump_arena(global->arena);
