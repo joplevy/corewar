@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 21:46:00 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/25 21:46:20 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/26 19:31:46 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_global	*init_global()
 	return (ret);
 }
 
-int				init_new_proc(t_list **procs, int pos)
+int				init_new_proc(t_global *gb, int pos)
 {
 	t_process	proc;
 	t_list		*new;
@@ -62,7 +62,8 @@ int				init_new_proc(t_list **procs, int pos)
 
 	proc.carry = 0;
 	proc.live = 0;
-	proc.cycles = 0;
+	proc.opc = gb->arena[pos % MEM_SIZE];
+	proc.cycles = (proc.opc > 0 && proc.opc < 17) ? OP_NBC(proc.opc) : 1;
 	proc.adress = pos;
 	i = -1;
 	j = -1;
@@ -71,7 +72,7 @@ int				init_new_proc(t_list **procs, int pos)
 			(proc.regs)[i][j] = 0;
 	if (!(new = ft_lstnew(&proc, sizeof(t_process))))
 		return (0);
-	ft_lstadd(procs, new);
+	ft_lstadd(&(gb->procs), new);
 	return (1);
 }
 
@@ -90,7 +91,7 @@ int				load_players(t_global *gb)
 		ft_memcpy((void*)(gb->arena + pos), \
 					(const void*)((gb->players)[i])->code, \
 					(size_t)((gb->players)[i])->size);
-		if (!init_new_proc(&(gb->procs), pos))
+		if (!init_new_proc(gb, pos))
 			return (0);
 	}
  	return (1);
