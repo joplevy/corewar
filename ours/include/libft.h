@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 12:35:25 by jplevy            #+#    #+#             */
-/*   Updated: 2017/05/11 18:02:02 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/30 20:06:59 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ int					get_next_line(int const fd, char **line);
 int					ft_printf(const char *format, ...);
 int					ft_abs(int i);
 void				*ft_lstfree(t_list **lst, void (*ft_free_node)(void *));
+void				ft_lstdelnode(t_list **lst, t_list *node, void (*f)(void *));
 t_list				*ft_get_args(int ac, char **av, t_opt *tab, char elsetype);
 /*
 ** ft_get_args take the args a tab witch define each option name, ans argumants type
