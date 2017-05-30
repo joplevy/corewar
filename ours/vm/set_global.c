@@ -59,7 +59,7 @@ int				get_player(t_global *global, int pid, t_list *list)
 	t_parg		*arg;
 
 	arg = (t_parg*)(list->content);
-	if (arg->fd <= 0)
+	if (arg->fd <= 0 || pid <= 0)
 		return(0);
 	//	return(open_error(arg));
 	i = 0;

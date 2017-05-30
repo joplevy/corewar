@@ -9,7 +9,7 @@ int				init_new_proc(t_player *player, t_list **procs)
 	proc.player = player->id;
 	proc.carry = 0;
 	proc.live = 0;
-	proc.cycles = 0;
+	proc.cycles = ;
 	proc.adress = player->pos;
 	i = -1;
 	while (++i < REG_NUMBER)

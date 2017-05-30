@@ -21,8 +21,9 @@ void			check_lives(t_global *global, int *cycles)
 	while (tmp != NULL)
 	{
 		next = tmp->next;
-		if (!ACC(tmp, live))
+		if (!LIVE(tmp))
 			delete_process(global->procs, tmp);
+		LIVE(tmp) = 0;
 		tmp = next;
 	}
 	if (global->lives > NBR_LIVE || global->checks == MAX_CHECKS)
@@ -44,10 +45,9 @@ void			treat_all_procs(t_global *global)
 	tmp = global->procs;
 	while (tmp != NULL)
 	{
-		if (ACC(tmp, wait) == 1)
+		if (!(--CYCLE(tmp)))
 		{
 			exec_instruction(tmp, global);
-			go_to_next((t_player*)(tmp->content), global->arena);
 		}
 		else if (ACC(tmp, wait) > 0)
 			ACC(tmp, wait) -= 1;

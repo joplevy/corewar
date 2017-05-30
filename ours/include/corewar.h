@@ -24,6 +24,13 @@
 # define TAB_HEIGHT 64
 # define TAB_WIDTH 64
 
+typedef enum	e_vmtype
+{
+	dir = 0,
+	ind,
+	reg
+}
+
 typedef enum	e_col
 {
 	green_b=1,
@@ -35,7 +42,7 @@ typedef enum	e_col
 	yellow_b,
 	b_yellow,
 	white_b,
-	b_white,
+	b_white
 }				t_col;
 
 typedef struct		s_process
