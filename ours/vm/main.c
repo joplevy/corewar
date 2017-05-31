@@ -6,11 +6,9 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/30 20:23:34 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/31 19:43:44 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <corewar.h>
 
 #include <corewar.h>
 
@@ -50,8 +48,8 @@ void			treat_all_procs(t_global *global)
 		TIME(tmp)--;
 		if (TIME(tmp) == 0)
 		{
-			exec_instruction(tmp, global);
-			lenght = get_params_lenght(ADR(tmp), global->arena);
+			// exec_instruction(tmp, global);
+			lenght = get_params_length(ADR(tmp), global->arena);
 			if (global->show == 1)
 			{
 				global->col[ADR(tmp)] -= 1;

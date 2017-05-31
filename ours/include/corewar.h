@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/30 20:11:40 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/31 19:42:28 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,15 @@
 
 # define TAB_HEIGHT 64
 # define TAB_WIDTH 64
+
+typedef enum		e_vmtype
+{
+	tnul = 0,
+	dir,
+	ind,
+	reg,
+	terr
+}					t_vmtype;
 
 typedef enum	e_col
 {
@@ -123,4 +132,13 @@ int					load_players(t_global *gb);
 int					init_new_proc(t_global *gb, int pos);
 t_global			*init_global();
 t_opt				*opt_tab(void);
+
+/*
+**		get_param_lenght.c
+*/
+
+int					get_params_length(int adr, unsigned char *arena);
+t_vmtype			get_type(unsigned char ocp, int	pos);
+int					get_type_size(t_vmtype type);
+
 #endif
