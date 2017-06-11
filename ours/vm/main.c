@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/31 20:00:49 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/06/11 20:16:04 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void			treat_all_procs(t_global *global)
 		if (TIME(tmp) == 0)
 		{
 			// exec_instruction(tmp, global);
+			// instructab[OPC(tmp) - 1](tmp, global);
 			lenght = get_params_length(ADR(tmp), global->arena);
 			if (global->show == 1)
 			{

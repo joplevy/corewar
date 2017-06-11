@@ -57,7 +57,6 @@ int				init_new_proc(t_global *gb, int pos)
 	t_process	proc;
 	t_list		*new;
 	int			i;
-	int			j;
 
 	proc.carry = 0;
 	proc.live = 0;
@@ -65,10 +64,8 @@ int				init_new_proc(t_global *gb, int pos)
 	proc.time = (proc.opc > 0 && proc.opc < 17) ? OP_NBC(proc.opc) : 1;
 	proc.adress = pos;
 	i = -1;
-	j = -1;
 	while (++i < REG_NUMBER)
-		while (++j < REG_SIZE)
-			(proc.regs)[i][j] = 0;
+			(proc.regs)[i] = 0;
 	if (!(new = ft_lstnew(&proc, sizeof(t_process))))
 		return (0);
 	ft_lstadd(&(gb->procs), new);

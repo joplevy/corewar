@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+         #
+#    By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/06 14:23:18 by niludwig          #+#    #+#              #
-#    Updated: 2017/05/31 19:45:16 by joeyplevy        ###   ########.fr        #
+#    Updated: 2017/06/11 20:14:54 by jplevy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ CFLAG = -Wall -Werror -Wextra
 # ASMSRC = ./assembleur/src/main_asm.c ./include/op.c
 # ASMOBJ = $(ASMSRC:.c=.o)
 VMSRC = ./vm/main.c ./include/op.c ./vm/get_info.c ./vm/set_global.c \
-		./vm/affichage.c ./vm/init.c ./vm/get_params_length.c
+		./vm/affichage.c ./vm/init.c ./vm/get_params_length.c \
+		./vm/instructions.c ./vm/instructab.c
 VMOBJ = $(VMSRC:.c=.o)
 LIBFT_PATH = ./libft/
 LIBFT = ./libft.a

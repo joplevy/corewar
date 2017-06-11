@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   corewar.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/10 20:22:13 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/06/11 20:14:08 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,7 @@ typedef struct		s_process
 	int				regs[REG_NUMBER];
 	int				time;
 	int 			adress;
-	int 			adress2;
-	int				param[3];
-	int 			param_type;
+	int 			next;
 }					t_process;
 
 typedef struct		s_player
@@ -144,5 +142,28 @@ t_opt				*opt_tab(void);
 int					get_params_length(int adr, unsigned char *arena);
 t_vmtype			get_type(unsigned char ocp, int	pos);
 int					get_type_size(t_vmtype type);
+
+/*
+**		instructions
+*/
+
+void				ft_live(t_list *p, t_global *gb);
+void				ft_ld(t_list *p, t_global *gb);
+void				ft_st(t_list *p, t_global *gb);
+void				ft_add(t_list *p, t_global *gb);
+void				ft_sub(t_list *p, t_global *gb);
+void				ft_and(t_list *p, t_global *gb);
+void				ft_or(t_list *p, t_global *gb);
+void				ft_xor(t_list *p, t_global *gb);
+void				ft_zjmp(t_list *p, t_global *gb);
+void				ft_ldi(t_list *p, t_global *gb);
+void				ft_sti(t_list *p, t_global *gb);
+void				ft_fork(t_list *p, t_global *gb);
+void				ft_lld(t_list *p, t_global *gb);
+void				ft_lldi(t_list *p, t_global *gb);
+void				ft_lfork(t_list *p, t_global *gb);
+void				ft_aff(t_list *p, t_global *gb);
+
+extern void 		(*instructab[17])(t_list *, t_global *);
 
 #endif
