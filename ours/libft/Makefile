@@ -6,7 +6,7 @@
 #    By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/01/04 14:21:43 by jplevy            #+#    #+#              #
-#    Updated: 2017/05/11 17:58:36 by joeyplevy        ###   ########.fr        #
+#    Updated: 2017/05/30 20:08:01 by joeyplevy        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,6 +85,7 @@ SRC_NAME = ft_bzero.c \
 		   ft_printf/altnorme.c \
 		   ft_abs.c \
 		   ft_lstfree.c \
+		   ft_lstdelnode.c \
 		   ft_get_args.c
 
 

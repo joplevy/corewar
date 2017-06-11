@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/30 18:17:22 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/06/10 20:22:13 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,15 @@
 # define TAB_HEIGHT 64
 # define TAB_WIDTH 64
 
+typedef enum		e_vmtype
+{
+	tnul = 0,
+	dir,
+	ind,
+	reg,
+	terr
+}					t_vmtype;
+
 typedef enum	e_col
 {
 	green_b=1,
@@ -58,9 +67,12 @@ typedef struct		s_process
 	int				carry;
 	int				live;
 	unsigned char	opc;
-	unsigned char	regs[REG_NUMBER][REG_SIZE];
+	int				regs[REG_NUMBER];
 	int				time;
-	int				adress;
+	int 			adress;
+	int 			adress2;
+	int				param[3];
+	int 			param_type;
 }					t_process;
 
 typedef struct		s_player
@@ -82,14 +94,13 @@ typedef struct 		s_global
 	unsigned char	*arena;
 	t_col			*col;
 	WINDOW			*box;
+	int 			nb_process;
 	int				lives;
 	int				last_id;
 	int				ctd;
 	int				checks;
-	int				period;
 	int				dump;
 	int				show;
-	int				nb_arg;
 	int 			nb_pl;
 }					t_global;
 
@@ -125,4 +136,13 @@ int					load_players(t_global *gb);
 int					init_new_proc(t_global *gb, int pos);
 t_global			*init_global();
 t_opt				*opt_tab(void);
+
+/*
+**		get_param_lenght.c
+*/
+
+int					get_params_length(int adr, unsigned char *arena);
+t_vmtype			get_type(unsigned char ocp, int	pos);
+int					get_type_size(t_vmtype type);
+
 #endif

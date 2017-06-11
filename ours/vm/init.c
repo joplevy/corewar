@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 21:46:00 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/26 19:31:46 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/30 20:18:31 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ t_global	*init_global()
 	ret->checks = 0;
 	ret->dump = -2;
 	ret->show = 0;
-	ret->nb_arg = 0;
 	ret->nb_pl = 0;
 	return (ret);
 }
@@ -63,7 +62,7 @@ int				init_new_proc(t_global *gb, int pos)
 	proc.carry = 0;
 	proc.live = 0;
 	proc.opc = gb->arena[pos % MEM_SIZE];
-	proc.cycles = (proc.opc > 0 && proc.opc < 17) ? OP_NBC(proc.opc) : 1;
+	proc.time = (proc.opc > 0 && proc.opc < 17) ? OP_NBC(proc.opc) : 1;
 	proc.adress = pos;
 	i = -1;
 	j = -1;
@@ -75,6 +74,7 @@ int				init_new_proc(t_global *gb, int pos)
 	ft_lstadd(&(gb->procs), new);
 	return (1);
 }
+
 
 int				load_players(t_global *gb)
 {

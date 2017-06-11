@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/30 18:59:57 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/31 20:00:49 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void			check_lives(t_global *global)
 	{
 		next = tmp->next;
 		if (!LIVE(tmp))
-			delete_process(global->procs, tmp);
+			ft_lstdelnode(&(global->procs), tmp, NULL);
+		else
+			LIVE(tmp) = 0;
 		tmp = next;
 	}
 	if (global->lives > NBR_LIVE || global->checks == MAX_CHECKS)
@@ -46,8 +48,8 @@ void			treat_all_procs(t_global *global)
 		TIME(tmp)--;
 		if (TIME(tmp) == 0)
 		{
-			exec_instruction(tmp, global);
-			lenght = get_params_lenght(ADR(tmp), global->arena);
+			// exec_instruction(tmp, global);
+			lenght = get_params_length(ADR(tmp), global->arena);
 			if (global->show == 1)
 			{
 				global->col[ADR(tmp)] -= 1;
@@ -72,7 +74,7 @@ void			play(t_global *global)
 	{
 		period += 1;
 		treat_all_procs(global);
-		if (global->period == global->ctd)
+		if (period == global->ctd)
 		{
 			check_lives(global);
 			period = 0;
@@ -111,3 +113,4 @@ int			main(int ac, char **av)
 		end_ncurses(global->box);
 	return (0);
 }
+
