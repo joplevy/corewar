@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 21:46:00 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/30 20:18:31 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/06/12 17:17:06 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,19 @@ int				init_new_proc(t_global *gb, int pos)
 	t_process	proc;
 	t_list		*new;
 	int			i;
+	int			j;
 
 	proc.carry = 0;
 	proc.live = 0;
 	proc.opc = gb->arena[pos % MEM_SIZE];
 	proc.time = (proc.opc > 0 && proc.opc < 17) ? OP_NBC(proc.opc) : 1;
 	proc.adress = pos;
+	proc.next = 0;
 	i = -1;
+	j = -1;
 	while (++i < REG_NUMBER)
-			(proc.regs)[i] = 0;
+		while (++j < REG_SIZE)
+			(proc.regs)[i][j] = 0;
 	if (!(new = ft_lstnew(&proc, sizeof(t_process))))
 		return (0);
 	ft_lstadd(&(gb->procs), new);

@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/11 20:14:08 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/12 20:43:08 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 # define TIME(NODE) (((t_process*)((NODE)->content))->time)
 # define CARRY(NODE) (((t_process*)((NODE)->content))->carry)
 # define LIVE(NODE) (((t_process*)((NODE)->content))->live)
-# define REG(NODE) (((t_process*)((NODE)->content))->reg)
+# define REG(NODE) (((t_process*)((NODE)->content))->regs)
+# define NEXT(NODE) (((t_process*)((NODE)->content))->next)
 
 # define OP_NAME(OP) (g_op_tab[OP - 1].name)
 # define OP_NBP(OP) (g_op_tab[OP - 1].nb_param)
@@ -67,7 +68,7 @@ typedef struct		s_process
 	int				carry;
 	int				live;
 	unsigned char	opc;
-	int				regs[REG_NUMBER];
+	char			regs[REG_NUMBER][REG_SIZE];
 	int				time;
 	int 			adress;
 	int 			next;
