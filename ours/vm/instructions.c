@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/11 19:54:59 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/12 20:52:12 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/13 04:15:20 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ void				ft_ld(t_list *p, t_global *gb)
 	int		val;
 	char	t1;
 	
-	ft_printf("%s ", __func__);
 	t1 = get_typ(gb->arena[ADR(p) + 1], 0);
 	if ((t1 == T_DIR || t1 == T_IND) && \
 		get_typ(gb->arena[ADR(p) + 1], 1) == T_REG)
@@ -99,17 +98,36 @@ void				ft_ld(t_list *p, t_global *gb)
 
 void				ft_st(t_list *p, t_global *gb)
 {
-	if (p && gb)
+	int		t2;
+	int 	rin;
+	int 	rout;
+
+	NEXT(p) = 0;
+	t2 = get_typ(gb->arena[ADR(p) + 1], 1);
+	if ((t2 == T_IND || t2 == T_REG) && \
+		get_typ(gb->arena[ADR(p) + 1], 0) == T_REG)
 	{
-		ft_printf("%s ", __func__);
+		rin = ft_get_int(gb->arena, ADR(p) + 2, 1);
+		if (rin > 0 && rin < REG_NUMBER)
+		{
+			rout = ft_get_int(gb->arena, ADR(p) + 3, 1);
+			if (t2 == T_REG && rout < REG_NUMBER && rout > 0)
+			{
+				ft_reg_write(p, rout, \
+					ft_get_int((unsigned char *)(REG(p)[rin]), 0, 4));
+				NEXT(p) = ADR(p) + 3;
+			}
+		}
 	}
+	if (NEXT(p) == 0)
+		NEXT(p) = ADR(p) + 1;
 }
 
 void				ft_add(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
@@ -117,7 +135,7 @@ void				ft_sub(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
@@ -125,7 +143,7 @@ void				ft_and(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
@@ -133,7 +151,7 @@ void				ft_or(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
@@ -141,7 +159,7 @@ void				ft_xor(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
@@ -149,7 +167,7 @@ void				ft_zjmp(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
@@ -157,7 +175,7 @@ void				ft_ldi(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
@@ -165,7 +183,7 @@ void				ft_sti(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
@@ -173,7 +191,7 @@ void				ft_fork(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
@@ -181,7 +199,7 @@ void				ft_lld(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
@@ -189,7 +207,7 @@ void				ft_lldi(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
@@ -197,7 +215,7 @@ void				ft_lfork(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
@@ -205,7 +223,7 @@ void				ft_aff(t_list *p, t_global *gb)
 {
 	if (p && gb)
 	{
-		ft_printf("%s ", __func__);
+		return;
 	}
 }
 
