@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   instructions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/11 19:54:59 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/13 04:15:20 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/13 05:06:18 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,12 @@ void				ft_st(t_list *p, t_global *gb)
 			{
 				ft_reg_write(p, rout, \
 					ft_get_int((unsigned char *)(REG(p)[rin]), 0, 4));
-				NEXT(p) = ADR(p) + 3;
+				NEXT(p) = ADR(p) + 4;
+			}
+			if (t2 == T_IND)
+			{
+				ft_arena_write();
+				NEXT(p) = ADR(p) + 3 + IND_SIZE;
 			}
 		}
 	}
