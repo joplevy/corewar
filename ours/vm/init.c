@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 21:46:00 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/12 17:17:06 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/14 00:07:51 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_global	*init_global()
 	return (ret);
 }
 
-int				init_new_proc(t_global *gb, int pos)
+int				init_new_proc(t_global *gb, int pos, int id)
 {
 	t_process	proc;
 	t_list		*new;
@@ -66,10 +66,13 @@ int				init_new_proc(t_global *gb, int pos)
 	proc.adress = pos;
 	proc.next = 0;
 	i = -1;
-	j = -1;
 	while (++i < REG_NUMBER)
+	{
+		j = -1;
 		while (++j < REG_SIZE)
 			(proc.regs)[i][j] = 0;
+	}
+	ft_int_write((unsigned char*)(proc.regs[0]), 0, id, 4);
 	if (!(new = ft_lstnew(&proc, sizeof(t_process))))
 		return (0);
 	ft_lstadd(&(gb->procs), new);
@@ -92,7 +95,7 @@ int				load_players(t_global *gb)
 		ft_memcpy((void*)(gb->arena + pos), \
 					(const void*)((gb->players)[i])->code, \
 					(size_t)((gb->players)[i])->size);
-		if (!init_new_proc(gb, pos))
+		if (!init_new_proc(gb, pos, -(i + 1)))
 			return (0);
 	}
  	return (1);

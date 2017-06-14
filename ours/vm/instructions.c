@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   instructions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/11 19:54:59 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/13 05:06:18 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/06/14 01:48:58 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,14 @@ int					get_typ(unsigned char ocp, int	pos)
 	return (0);
 }
 
-void			ft_reg_write(t_list *p, int reg_nb, int data)
+void			ft_int_write(unsigned char *arena, int adr, int val, int size)
 {
-	if (reg_nb > 0 && reg_nb <= REG_NUMBER)
+	int		i;
+
+	i = -1;
+	while (++i < size)
 	{
-		REG(p)[reg_nb - 1][0] = (char)((data & 0xFF000000) >> 24);
-		REG(p)[reg_nb - 1][1] = (char)((data & 0xFF0000) >> 16);
-		REG(p)[reg_nb - 1][2] = (char)((data & 0xFF00) >> 8);
-		REG(p)[reg_nb - 1][3] = (char)(data & 0xFF);
+		arena[adr + i] = (val >> ((size - (i + 1)) * 8)) & 0xFF;
 	}
 }
 
@@ -66,11 +66,13 @@ void			ft_reg_write(t_list *p, int reg_nb, int data)
 
 void				ft_live(t_list *p, t_global *gb)
 {
-		//checker que l'id recu soit valide
-	gb->last_id = ft_get_int(gb->arena, ADR(p) + 1, 4);
+	int		id;
+
+	id = ft_get_int(gb->arena, ADR(p) + 1, 4);
+	if (id < 0 && id > -5)
+		gb->last_id = id;
 	LIVE(p)++;
-	NEXT(p) = ADR(p) + 4;
-	NEXT(p)++;
+	NEXT(p) = (ADR(p) + 5) % MEM_SIZE;
 }
 
 void				ft_ld(t_list *p, t_global *gb)
@@ -87,13 +89,14 @@ void				ft_ld(t_list *p, t_global *gb)
 			(ADR(p) + (ft_get_int(gb->arena, \
 			ADR(p) + 2, IND_SIZE) % IDX_MOD)) % MEM_SIZE;
 		val = ft_get_int(gb->arena, adress, REG_SIZE);
-		ft_reg_write(p, ft_get_int(gb->arena, ADR(p) + 2 + \
-			get_type_siz(t1), 1), val);
+		ft_int_write((unsigned char *)(REG(p)[ft_get_int(gb->arena, ADR(p) + 2 + \
+			get_type_siz(t1), 1) - 1]), 0, val, REG_SIZE);
 		CARRY(p) = (val == 0) ? 1 : 0;
-		NEXT(p) = ADR(p) + 3 + get_type_siz(t1);
+		ft_printf("%d\n", CARRY(p));
+		NEXT(p) = (ADR(p) + 3 + get_type_siz(t1)) % MEM_SIZE;
 	}
 	else
-		NEXT(p) = ADR(p) + 1;
+		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
 }
 
 void				ft_st(t_list *p, t_global *gb)
@@ -102,7 +105,6 @@ void				ft_st(t_list *p, t_global *gb)
 	int 	rin;
 	int 	rout;
 
-	NEXT(p) = 0;
 	t2 = get_typ(gb->arena[ADR(p) + 1], 1);
 	if ((t2 == T_IND || t2 == T_REG) && \
 		get_typ(gb->arena[ADR(p) + 1], 0) == T_REG)
@@ -110,22 +112,29 @@ void				ft_st(t_list *p, t_global *gb)
 		rin = ft_get_int(gb->arena, ADR(p) + 2, 1);
 		if (rin > 0 && rin < REG_NUMBER)
 		{
-			rout = ft_get_int(gb->arena, ADR(p) + 3, 1);
-			if (t2 == T_REG && rout < REG_NUMBER && rout > 0)
+			if (t2 == T_REG)
 			{
-				ft_reg_write(p, rout, \
-					ft_get_int((unsigned char *)(REG(p)[rin]), 0, 4));
-				NEXT(p) = ADR(p) + 4;
+				rout = ft_get_int(gb->arena, ADR(p) + 3, 1);
+				if (rout <= REG_NUMBER && rout > 0)
+				{
+					ft_int_write((unsigned char *)(REG(p)[rout - 1]), 0, \
+						ft_get_int((unsigned char *)(REG(p)[rin - 1]), 0, 4), 4);
+					NEXT(p) = (ADR(p) + 4) % MEM_SIZE;
+				}
+				else
+					NEXT(p) = (ADR(p) + 1) % MEM_SIZE;				
 			}
 			if (t2 == T_IND)
 			{
-				ft_arena_write();
-				NEXT(p) = ADR(p) + 3 + IND_SIZE;
+				ft_int_write(gb->arena, (ADR(p) + (ft_get_int(gb->arena, \
+					ADR(p) + 3, IND_SIZE) % IDX_MOD)) % MEM_SIZE,\
+					ft_get_int((unsigned char *)(REG(p)[rin - 1]), 0, 4), REG_SIZE);
+				NEXT(p) = (ADR(p) + 3 + IND_SIZE) % MEM_SIZE;
 			}
 		}
 	}
-	if (NEXT(p) == 0)
-		NEXT(p) = ADR(p) + 1;
+	else
+		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
 }
 
 void				ft_add(t_list *p, t_global *gb)

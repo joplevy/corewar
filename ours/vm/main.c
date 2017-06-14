@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/13 00:46:22 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/14 01:23:58 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void			treat_all_procs(t_global *global)
 			{
 				instructab[OPC(tmp) - 1](tmp, global);
 				lenght = get_params_length(ADR(tmp), global->arena) + 1;
-				if (OPC(tmp) > 2)
+				if (OPC(tmp) > 3)
 				{
 					if (global->show == 1)
 					{
@@ -82,7 +82,10 @@ void			treat_all_procs(t_global *global)
 				ADR(tmp)++;
 			}
 			OPC(tmp) = global->arena[ADR(tmp)];
-			TIME(tmp) = (OPC(tmp) > 0 && OPC(tmp) < 17) ? OP_NBC(OPC(tmp)) : 1;
+			if (OPC(tmp) > 0 && OPC(tmp) < 17)
+				TIME(tmp) = OP_NBC(OPC(tmp));
+			else
+				TIME(tmp) = 1;
 		}
 		tmp = tmp->next;
 	}
@@ -95,7 +98,7 @@ void			play(t_global *global)
 
 	cycles = -1;
 	period = 0;
-	while (++cycles != global->dump + 1 && global->procs != NULL)
+	while (++cycles != global->dump && global->procs != NULL)
 	{
 		period += 1;
 		treat_all_procs(global);

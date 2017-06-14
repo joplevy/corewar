@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/12 20:43:08 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/14 00:05:08 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int					set_global(t_list *args, t_global *gb);
 */
 
 int					load_players(t_global *gb);
-int					init_new_proc(t_global *gb, int pos);
+int					init_new_proc(t_global *gb, int pos, int id);
 t_global			*init_global();
 t_opt				*opt_tab(void);
 
@@ -147,6 +147,8 @@ int					get_type_size(t_vmtype type);
 /*
 **		instructions
 */
+
+void			ft_int_write(unsigned char *arena, int adr, int val, int size);
 
 void				ft_live(t_list *p, t_global *gb);
 void				ft_ld(t_list *p, t_global *gb);

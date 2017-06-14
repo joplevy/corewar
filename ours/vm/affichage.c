@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   affichage.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/14 14:12:41 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/25 20:56:28 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/06/13 21:51:05 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void		ft_putbinary(char *str, int size)
 	while (++i < size)
 	{
 		ft_printf("%02x ", str[i] & 0xFF);
-		if (i + 1 % TAB_WIDTH == 0)
+		if ((i + 1) % TAB_WIDTH == 0)
 			ft_putchar('\n');
 	}
 }
