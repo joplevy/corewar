@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 21:31:47 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/04/25 23:25:25 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/23 17:48:40 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int				get_player(t_global *global, int pid, t_list *list)
 	t_parg		*arg;
 
 	arg = (t_parg*)(list->content);
-	if (arg->fd <= 0 || pid <= 0)
+	if (arg->fd <= 0)
 		return(0);
 	//	return(open_error(arg));
 	i = 0;

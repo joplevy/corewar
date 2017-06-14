@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 21:02:48 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/04 23:23:31 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/05/13 18:16:13 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ int		main()
 	all->col = color_init();
 	initscr();
 	curs_set(0);
-	start_color();			/* Start color 			*/
 	refresh();
+	start_color();			/* Start color 			*/
 	init_pair(1, COLOR_GREEN, COLOR_BLACK);
 	init_pair(2, COLOR_BLACK, COLOR_GREEN);
 	init_pair(3, COLOR_RED, COLOR_BLACK);
