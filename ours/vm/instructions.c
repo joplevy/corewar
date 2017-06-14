@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/11 19:54:59 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/14 18:02:25 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/14 18:51:51 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,34 +185,94 @@ void				ft_add(t_list *p, t_global *gb)
 
 void				ft_sub(t_list *p, t_global *gb)
 {
-	if (p && gb)
+	int		r1;
+	int		r2;
+	int		r3;
+
+	if (((gb->arena[ADR(p) + 1] >> 2) & 0x3f) == 0x15)
 	{
-		return;
+		if (!(r1 = ft_get_reg_nb(gb->arena, ADR(p) + 2)) \
+			|| !(r2 = ft_get_reg_nb(gb->arena, ADR(p) + 3)) \
+			|| !(r3 = ft_get_reg_nb(gb->arena, ADR(p) + 4)))
+			NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+		else
+		{
+			CARRY(p) = (r2 + r1 == 0) ? 1 : 0;
+			ft_reg_write(p, r3, ft_get_reg(p, r2) - ft_get_reg(p, r1));
+			NEXT(p) = (ADR(p) + 5) % MEM_SIZE;
+		}
 	}
+	else
+		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
 }
 
 void				ft_and(t_list *p, t_global *gb)
 {
-	if (p && gb)
+	int		r1;
+	int		r2;
+	int		r3;
+
+	if (((gb->arena[ADR(p) + 1] >> 2) & 0x3f) == 0x15)
 	{
-		return;
+		if (!(r1 = ft_get_reg_nb(gb->arena, ADR(p) + 2)) \
+			|| !(r2 = ft_get_reg_nb(gb->arena, ADR(p) + 3)) \
+			|| !(r3 = ft_get_reg_nb(gb->arena, ADR(p) + 4)))
+			NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+		else
+		{
+			CARRY(p) = (r2 + r1 == 0) ? 1 : 0;
+			ft_reg_write(p, r3, ft_get_reg(p, r2) & ft_get_reg(p, r1));
+			NEXT(p) = (ADR(p) + 5) % MEM_SIZE;
+		}
 	}
+	else
+		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
 }
 
 void				ft_or(t_list *p, t_global *gb)
 {
-	if (p && gb)
+	int		r1;
+	int		r2;
+	int		r3;
+
+	if (((gb->arena[ADR(p) + 1] >> 2) & 0x3f) == 0x15)
 	{
-		return;
+		if (!(r1 = ft_get_reg_nb(gb->arena, ADR(p) + 2)) \
+			|| !(r2 = ft_get_reg_nb(gb->arena, ADR(p) + 3)) \
+			|| !(r3 = ft_get_reg_nb(gb->arena, ADR(p) + 4)))
+			NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+		else
+		{
+			CARRY(p) = (r2 + r1 == 0) ? 1 : 0;
+			ft_reg_write(p, r3, ft_get_reg(p, r2) | ft_get_reg(p, r1));
+			NEXT(p) = (ADR(p) + 5) % MEM_SIZE;
+		}
 	}
+	else
+		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
 }
 
 void				ft_xor(t_list *p, t_global *gb)
 {
-	if (p && gb)
+	int		r1;
+	int		r2;
+	int		r3;
+
+	if (((gb->arena[ADR(p) + 1] >> 2) & 0x3f) == 0x15)
 	{
-		return;
+		if (!(r1 = ft_get_reg_nb(gb->arena, ADR(p) + 2)) \
+			|| !(r2 = ft_get_reg_nb(gb->arena, ADR(p) + 3)) \
+			|| !(r3 = ft_get_reg_nb(gb->arena, ADR(p) + 4)))
+			NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+		else
+		{
+			CARRY(p) = (r2 + r1 == 0) ? 1 : 0;
+			ft_reg_write(p, r3, ft_get_reg(p, r2) ^ ft_get_reg(p, r1));
+			NEXT(p) = (ADR(p) + 5) % MEM_SIZE;
+		}
 	}
+	else
+		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
 }
 
 void				ft_zjmp(t_list *p, t_global *gb)
