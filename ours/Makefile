@@ -6,7 +6,7 @@
 #    By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/06 14:23:18 by niludwig          #+#    #+#              #
-#    Updated: 2017/06/11 20:14:54 by jplevy           ###   ########.fr        #
+#    Updated: 2017/06/14 18:12:00 by jplevy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,12 +40,12 @@ $(VM) : $(VMOBJ)
 
 clean:
 	@$(MAKE) -C $(LIBFT_PATH) clean
-	@$(RM) $(ASMOBJ)
+	# @$(RM) $(ASMOBJ)
 	@$(RM) $(VMOBJ)
 
 fclean: clean
 	@$(MAKE) -C $(LIBFT_PATH) fclean
-	@$(RM) $(ASM)
+	# @$(RM) $(ASM)
 	@$(RM) $(VM)
 
 re: fclean all

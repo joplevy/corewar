@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/11 19:54:59 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/14 01:48:58 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/14 18:02:25 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,24 @@ void			ft_int_write(unsigned char *arena, int adr, int val, int size)
 	}
 }
 
+int				ft_get_reg_nb(unsigned char *arena, int adr)
+{
+	int		ret;
+
+	ret = ft_get_int(arena, adr, 1);
+	return ((ret > 0 && ret <= REG_NUMBER) ? ret : 0);
+}
+
+int				ft_get_reg(t_list *p, int reg)
+{
+	return (ft_get_int((unsigned char *)(REG(p)[reg - 1]), 0, REG_SIZE));
+}
+
+void			ft_reg_write(t_list *p, int reg, int val)
+{
+	ft_int_write((unsigned char *)(REG(p)[reg - 1]), 0, val, REG_SIZE);
+}
+
 /*
 ** instructions 
 */
@@ -80,20 +98,25 @@ void				ft_ld(t_list *p, t_global *gb)
 	int		adress;
 	int		val;
 	char	t1;
+	int		r2;
 	
 	t1 = get_typ(gb->arena[ADR(p) + 1], 0);
 	if ((t1 == T_DIR || t1 == T_IND) && \
 		get_typ(gb->arena[ADR(p) + 1], 1) == T_REG)
 	{
-		adress = (t1 == T_DIR) ? ADR(p) + 2 : \
+		adress = (t1 == T_DIR) ? (ADR(p) + 2) % MEM_SIZE : \
 			(ADR(p) + (ft_get_int(gb->arena, \
 			ADR(p) + 2, IND_SIZE) % IDX_MOD)) % MEM_SIZE;
 		val = ft_get_int(gb->arena, adress, REG_SIZE);
-		ft_int_write((unsigned char *)(REG(p)[ft_get_int(gb->arena, ADR(p) + 2 + \
-			get_type_siz(t1), 1) - 1]), 0, val, REG_SIZE);
-		CARRY(p) = (val == 0) ? 1 : 0;
-		ft_printf("%d\n", CARRY(p));
-		NEXT(p) = (ADR(p) + 3 + get_type_siz(t1)) % MEM_SIZE;
+		if ((r2 = ft_get_reg_nb(gb->arena, \
+			(ADR(p) + 2 + get_type_siz(t1)) % MEM_SIZE)))
+		{
+			ft_reg_write(p, r2, val);
+			NEXT(p) = (ADR(p) + 3 + get_type_siz(t1)) % MEM_SIZE;
+			CARRY(p) = (val == 0) ? 1 : 0;
+		}
+		else
+			NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
 	}
 	else
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
@@ -117,8 +140,7 @@ void				ft_st(t_list *p, t_global *gb)
 				rout = ft_get_int(gb->arena, ADR(p) + 3, 1);
 				if (rout <= REG_NUMBER && rout > 0)
 				{
-					ft_int_write((unsigned char *)(REG(p)[rout - 1]), 0, \
-						ft_get_int((unsigned char *)(REG(p)[rin - 1]), 0, 4), 4);
+					ft_reg_write(p, rout, ft_get_reg(p, rin));
 					NEXT(p) = (ADR(p) + 4) % MEM_SIZE;
 				}
 				else
@@ -126,9 +148,10 @@ void				ft_st(t_list *p, t_global *gb)
 			}
 			if (t2 == T_IND)
 			{
+
 				ft_int_write(gb->arena, (ADR(p) + (ft_get_int(gb->arena, \
 					ADR(p) + 3, IND_SIZE) % IDX_MOD)) % MEM_SIZE,\
-					ft_get_int((unsigned char *)(REG(p)[rin - 1]), 0, 4), REG_SIZE);
+					ft_get_reg(p, rin), REG_SIZE);
 				NEXT(p) = (ADR(p) + 3 + IND_SIZE) % MEM_SIZE;
 			}
 		}
@@ -139,10 +162,25 @@ void				ft_st(t_list *p, t_global *gb)
 
 void				ft_add(t_list *p, t_global *gb)
 {
-	if (p && gb)
+	int		r1;
+	int		r2;
+	int		r3;
+
+	if (((gb->arena[ADR(p) + 1] >> 2) & 0x3f) == 0x15)
 	{
-		return;
+		if (!(r1 = ft_get_reg_nb(gb->arena, ADR(p) + 2)) \
+			|| !(r2 = ft_get_reg_nb(gb->arena, ADR(p) + 3)) \
+			|| !(r3 = ft_get_reg_nb(gb->arena, ADR(p) + 4)))
+			NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+		else
+		{
+			CARRY(p) = (r2 + r1 == 0) ? 1 : 0;
+			ft_reg_write(p, r3, ft_get_reg(p, r2) + ft_get_reg(p, r1));
+			NEXT(p) = (ADR(p) + 5) % MEM_SIZE;
+		}
 	}
+	else
+		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
 }
 
 void				ft_sub(t_list *p, t_global *gb)
