@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   instructions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/11 19:54:59 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/14 18:51:51 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/15 09:07:12 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,12 +275,16 @@ void				ft_xor(t_list *p, t_global *gb)
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
 }
 
+/*
+** gros porc qui teste que la compilation
+*/
+
 void				ft_zjmp(t_list *p, t_global *gb)
 {
-	if (p && gb)
-	{
-		return;
-	}
+	if (CARRY(p) == 1)
+		NEXT(p) = (ADR(p) + (ft_get_int(gb->arena, ADR(p) + 1, 2) % IDX_MOD)) % MEM_SIZE;
+	else
+		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
 }
 
 void				ft_ldi(t_list *p, t_global *gb)
@@ -301,10 +305,8 @@ void				ft_sti(t_list *p, t_global *gb)
 
 void				ft_fork(t_list *p, t_global *gb)
 {
-	if (p && gb)
-	{
-		return;
-	}
+	NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+	
 }
 
 void				ft_lld(t_list *p, t_global *gb)
