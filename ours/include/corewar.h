@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/14 00:05:08 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/16 21:38:31 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,13 @@ typedef enum	e_col
 	white_b,
 	b_white,
 }				t_col;
+
+typedef struct		s_param
+{
+	int				type;
+	int				val;
+	int				reg;
+}					t_param;
 
 typedef struct		s_process
 {

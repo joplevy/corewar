@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/14 18:52:25 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/17 00:55:13 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void			treat_all_procs(t_global *global)
 			{
 				instructab[OPC(tmp) - 1](tmp, global);
 				lenght = get_params_length(ADR(tmp), global->arena) + 1;
-				if (OPC(tmp) > 8)
+				if (OPC(tmp) > 9 && OPC(tmp) != 0x0c)
 				{
 					if (global->show == 1)
 					{
