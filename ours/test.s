@@ -9,8 +9,8 @@ live %94
 st r1, r2
 st r1, 100
 st r2, 150
-ld %17, r4
-ld %15, r2
+ld -20, r4
+ld %-1, r2
 and r4, r2, r3
 st r3, 200
 fork %3

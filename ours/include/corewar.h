@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/16 21:38:31 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/18 23:49:39 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # define OP_NAME(OP) (g_op_tab[OP - 1].name)
 # define OP_NBP(OP) (g_op_tab[OP - 1].nb_param)
 # define OP_PAR(OP) (g_op_tab[OP - 1].param)
-# define OP_NBC(OP) (g_op_tab[OP - 1].nb_cycles)
+# define OP_NBC(OP) ((OP > 0 && OP <= 16) ? g_op_tab[OP - 1].nb_cycles : 1)
 # define OP_DESC(OP) (g_op_tab[OP - 1].description)
 # define OP_OCP(OP) (g_op_tab[OP - 1].ocp)
 # define OP_LAB(OP) (g_op_tab[OP - 1].label_size)

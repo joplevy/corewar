@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/17 00:55:13 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/18 23:50:23 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,25 +52,13 @@ void			treat_all_procs(t_global *global)
 			{
 				instructab[OPC(tmp) - 1](tmp, global);
 				lenght = get_params_length(ADR(tmp), global->arena) + 1;
-				if (OPC(tmp) > 9 && OPC(tmp) != 0x0c)
+				if (global->show == 1)
 				{
-					if (global->show == 1)
-					{
-						global->col[ADR(tmp)] -= 1;
-						global->col[(ADR(tmp) + lenght) % MEM_SIZE] += 1;
-					}
-					ADR(tmp) = (ADR(tmp) + lenght) % MEM_SIZE;
+					global->col[ADR(tmp)] -= 1;
+					global->col[(ADR(tmp) + lenght) % MEM_SIZE] += 1;
 				}
-				else
-				{
-					if (global->show == 1)
-					{
-						global->col[ADR(tmp)] -= 1;
-						global->col[NEXT(tmp)] += 1;
-					}
-					ADR(tmp) = NEXT(tmp);
-					NEXT(tmp) = 0;
-				}
+				ADR(tmp) = (ADR(tmp) + lenght) % MEM_SIZE;
+		
 			}
 			else
 			{
@@ -82,10 +70,7 @@ void			treat_all_procs(t_global *global)
 				ADR(tmp)++;
 			}
 			OPC(tmp) = global->arena[ADR(tmp)];
-			if (OPC(tmp) > 0 && OPC(tmp) < 17)
-				TIME(tmp) = OP_NBC(OPC(tmp));
-			else
-				TIME(tmp) = 1;
+			TIME(tmp) = OP_NBC(OPC(tmp));
 		}
 		tmp = tmp->next;
 	}
