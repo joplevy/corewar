@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_putstr_fd_on.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/05 17:33:34 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/20 00:14:50 by jplevy           ###   ########.fr       */
+/*   Created: 2017/06/12 20:04:07 by niludwig          #+#    #+#             */
+/*   Updated: 2017/06/20 00:03:52 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <asm.h>
 
-size_t	ft_strlen(const char *s)
+int ft_putchar_fd_one(char c, int fd)
 {
-	size_t	i;
+    ft_putchar_fd(c, fd);
+    return (1);
+}
 
-	i = 0;
-	if (s)
-	{
-		while (s[i] != '\0')
-			i++;
-	}
-	return (i);
+void ft_putchar_fd_two(char c, char c2, int fd)
+{
+	ft_putchar_fd(c, fd);
+	ft_putchar_fd(c2, fd);
+}
+
+void ft_putchar_fd_quatro(char c, char c2, char c3, char c4, int fd)
+{
+	ft_putchar_fd(c, fd);
+	ft_putchar_fd(c2, fd);
+	ft_putchar_fd(c3, fd);
+	ft_putchar_fd(c4, fd);
 }

@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/18 23:50:23 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/19 21:32:22 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void			check_lives(t_global *global)
 void			treat_all_procs(t_global *global)
 {
 	t_list		*tmp;
-	int 		lenght;
 
 	tmp = global->procs;
 	while (tmp != NULL)
@@ -51,14 +50,12 @@ void			treat_all_procs(t_global *global)
 			if (OPC(tmp) > 0 && OPC(tmp) < 17)
 			{
 				instructab[OPC(tmp) - 1](tmp, global);
-				lenght = get_params_length(ADR(tmp), global->arena) + 1;
 				if (global->show == 1)
 				{
 					global->col[ADR(tmp)] -= 1;
-					global->col[(ADR(tmp) + lenght) % MEM_SIZE] += 1;
+					global->col[NEXT(tmp)] += 1;
 				}
-				ADR(tmp) = (ADR(tmp) + lenght) % MEM_SIZE;
-		
+				ADR(tmp) = NEXT(tmp);
 			}
 			else
 			{

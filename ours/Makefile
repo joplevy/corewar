@@ -6,46 +6,82 @@
 #    By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/06 14:23:18 by niludwig          #+#    #+#              #
-#    Updated: 2017/06/14 18:12:00 by jplevy           ###   ########.fr        #
+#    Updated: 2017/06/20 00:05:23 by jplevy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-ASM = asm
-VM = corewar
+ASM_EX = asm
+ASM_FILE = asm_check_body.c \
+			asm_check_param.c \
+			asm_complete_file.c \
+			asm_finalize.c \
+			asm_get_param.c \
+			asm_pars_body.c \
+			asm_pars_header.c \
+			asm_print_body.c \
+			asm_print_file.c \
+			ft_putstr_fd_on.c \
+			utilites_second.c \
+			utilities.c \
+			asm.c
+ASM_OBJ = $(ASM_FILE:.c=.o)
+ASM_DIR = ./assembleur/src/
+ASM_OBJ_DIR = ./assembleur/dst/
+ASM_SRC = $(addprefix $(ASM_DIR),$(ASM_FILE))
+ASM_DST = $(addprefix $(ASM_OBJ_DIR),$(ASM_OBJ))
+
+VM_EX = corewar
+VM_FILE = affichage.c \
+			get_info.c \
+			init.c \
+			instructab.c \
+			instructions.c \
+			main.c \
+			set_global.c
+VM_OBJ = $(VM_FILE:.c=.o)
+VM_DIR = ./vm/src/
+VM_OBJ_DIR = ./vm/dst/
+VM_SRC = $(addprefix $(VM_DIR),$(VM_FILE))
+VM_DST = $(addprefix $(VM_OBJ_DIR),$(VM_OBJ))
+
+OP_C = ./include/op.c
+OP_O = ./include/op.o
 CC = gcc
 CFLAG = -Wall -Werror -Wextra
-# ASMSRC = ./assembleur/src/main_asm.c ./include/op.c
-# ASMOBJ = $(ASMSRC:.c=.o)
-VMSRC = ./vm/main.c ./include/op.c ./vm/get_info.c ./vm/set_global.c \
-		./vm/affichage.c ./vm/init.c ./vm/get_params_length.c \
-		./vm/instructions.c ./vm/instructab.c
-VMOBJ = $(VMSRC:.c=.o)
+
 LIBFT_PATH = ./libft/
 LIBFT = ./libft.a
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror
 
-all: $(VM)
+all: $(VM_EX) $(ASM_EX)
 
-$(ASM): $(ASMOBJ)
+$(ASM_EX): $(ASM_DST) $(OP_O)
 	@$(MAKE) -C $(LIBFT_PATH)
-	@$(CC) -o $(ASM) $(ASMOBJ) -I./include -L. $(LIBFT) $(PRINTF)
+	@$(CC) -o $(ASM_EX) $(ASM_DST) $(OP_O) -I./include -L. $(LIBFT_PATH)$(LIBFT)
 
-$(VM) : $(VMOBJ)
+$(VM_EX) : $(VM_DST) $(OP_O)
 	@$(MAKE) -C $(LIBFT_PATH)
-	@$(CC) -o $(VM) $(VMOBJ) -I./include -L. $(LIBFT_PATH)$(LIBFT) -lncurses
+	@$(CC) -o $(VM_EX) $(VM_DST) $(OP_O) -I./include -L. $(LIBFT_PATH)$(LIBFT) -lncurses
 
-%.o: %.c
+$(OP_O): $(OP_C)
+	@$(CC) $(CFLAG) -o $@ -c $< -I./include
+
+$(VM_OBJ_DIR)%.o: $(VM_DIR)%.c
+	-@mkdir -p $(VM_OBJ_DIR)
+	@$(CC) $(CFLAG) -o $@ -c $< -I./include
+
+$(ASM_OBJ_DIR)%.o: $(ASM_DIR)%.c
+	-@mkdir -p $(ASM_OBJ_DIR)
 	@$(CC) $(CFLAG) -o $@ -c $< -I./include
 
 clean:
 	@$(MAKE) -C $(LIBFT_PATH) clean
-	# @$(RM) $(ASMOBJ)
-	@$(RM) $(VMOBJ)
+	@$(RM) $(ASM_DST)
+	@$(RM) $(VM_DST)
 
 fclean: clean
 	@$(MAKE) -C $(LIBFT_PATH) fclean
-	# @$(RM) $(ASM)
-	@$(RM) $(VM)
+	@$(RM) $(ASM_EX)
+	@$(RM) $(VM_EX)
 
 re: fclean all
