@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/14 01:23:58 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/17 00:20:44 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ int			main(int ac, char **av)
 {
 	t_global	*global;
 	t_list		*args;
-	t_list		*tmp;
 	t_opt		*tab;
 
 	tab = opt_tab();
@@ -132,8 +131,6 @@ int			main(int ac, char **av)
 	free(tab);
 	if (!set_global(args, global))
 		return (0);
-	tmp = global->procs;
-
 	if (global->show == 1)
 		init_ncurses(global);
 	play(global);

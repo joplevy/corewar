@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 21:31:47 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/23 17:48:40 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/06/19 19:01:43 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int				set_players_id(t_player **players)
 	if (!check_double(players))
 		return (0);
 	i = -1;
-	pid = 1;
+	pid = -1;
 	while (players[++i] != NULL)
 		if (!(players[i])->id)
 		{
@@ -45,7 +45,7 @@ int				set_players_id(t_player **players)
 			while (players[++j] != NULL)
 				if (i != j && (players[j])->id == pid)
 				{
-					pid++;
+					pid--;
 					j = -1;
 				}
 			(players[i])->id = pid;
@@ -59,7 +59,7 @@ int				get_player(t_global *global, int pid, t_list *list)
 	t_parg		*arg;
 
 	arg = (t_parg*)(list->content);
-	if (arg->fd <= 0)
+	if (arg->fd <= 2 || pid > MAX_PLAYERS || pid < (-1 * MAX_PLAYERS))
 		return(0);
 	//	return(open_error(arg));
 	i = 0;
@@ -71,7 +71,7 @@ int				get_player(t_global *global, int pid, t_list *list)
 		return (0);
 	}
 	//	return (malloc_err());
-	((global->players)[i])->id = pid;
+	((global->players)[i])->id = (pid > 0 ? pid * -1 : pid);
 	if (!get_info_player(arg->fd, (global->players)[i]))
 	{
 		close(arg->fd);

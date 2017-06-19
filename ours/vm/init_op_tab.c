@@ -1,3 +1,5 @@
+#include <corewar.h>
+
 void		init_tab_instruction(t_global *gb)
 {
 	gb->f[0] = ft_live;
