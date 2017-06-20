@@ -3,14 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   asm.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: niludwig <niludwig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 15:10:26 by niludwig          #+#    #+#             */
-/*   Updated: 2017/06/20 00:31:32 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/20 02:23:33 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <asm.h>
+
+static void ft_pars_arg(int ac, char **av)
+{
+	if (ac == 1)
+		ft_exit_msg("Usage: ./asm <sourcefile.s>");
+	else if (ac == 2)
+	{
+		if (av[ac - 1][ft_strlen(av[ac - 1]) - 1] != 's'
+			&& av[ac - 1][ft_strlen(av[ac - 1]) - 2] != '.')
+			ft_exit_msg("Wrong format files.\nUsage: ./asm <sourcefile.s>");
+	}
+	else if (ac > 2)
+		ft_exit_msg("Too many files.\nUsage: ./asm <sourcefile.s>");
+}
 
 int		main(int ac, char **av)
 {
@@ -18,8 +32,7 @@ int		main(int ac, char **av)
 	char		*ret;
 	int			i;
 
-	if (ac != 2)
-		return (ft_printf("Too many files or not enough\n"));
+	ft_pars_arg(ac, av);
 	if (!(asmb = (t_asm*)malloc(sizeof(t_asm))))
 		ft_exit_msg("Error in malloc");
 	if (!(asmb->f_content = ft_get_file_content(av[ac - 1])))
