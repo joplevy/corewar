@@ -6,13 +6,13 @@
 /*   By: niludwig <niludwig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 15:10:26 by niludwig          #+#    #+#             */
-/*   Updated: 2017/06/20 02:23:33 by niludwig         ###   ########.fr       */
+/*   Updated: 2017/06/20 02:27:36 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <asm.h>
 
-static void ft_pars_arg(int ac, char **av)
+static void		ft_pars_arg(int ac, char **av)
 {
 	if (ac == 1)
 		ft_exit_msg("Usage: ./asm <sourcefile.s>");
@@ -26,7 +26,7 @@ static void ft_pars_arg(int ac, char **av)
 		ft_exit_msg("Too many files.\nUsage: ./asm <sourcefile.s>");
 }
 
-int		main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	t_asm		*asmb;
 	char		*ret;

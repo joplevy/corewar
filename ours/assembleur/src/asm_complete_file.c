@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   asm_complete_file.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: niludwig <niludwig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 15:12:10 by niludwig          #+#    #+#             */
-/*   Updated: 2017/06/19 23:59:34 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/20 02:47:15 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@ void	ft_complete_file(t_asm *asmb)
 
 	if (lseek(asmb->fd, PROG_NAME_LENGTH + 8, SEEK_SET) == -1)
 		return ;
-	ft_putchar_fd_quatro((unsigned)asmb->prog_size >> 24,
-		asmb->prog_size >> 16, asmb->prog_size >> 8, asmb->prog_size, asmb->fd);
+	ft_putchar_fd_two((unsigned)asmb->prog_size >> 24,
+		asmb->prog_size >> 16, asmb->fd);
+	ft_putchar_fd_two(asmb->prog_size >> 8, asmb->prog_size, asmb->fd);
 	if (lseek(asmb->fd, COMMENT_LENGTH + 4, SEEK_CUR) == -1)
 		return ;
 	tmp = asmb->labdirs;

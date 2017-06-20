@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utilites_second.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: niludwig <niludwig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 18:52:48 by niludwig          #+#    #+#             */
-/*   Updated: 2017/06/19 22:00:21 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/20 02:29:20 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char		*ft_strjoin_n_free(char *s1, char *s2)
 	return (str);
 }
 
-char	*ft_get_file_content(char *file_name)
+char		*ft_get_file_content(char *file_name)
 {
 	char	*file_content;
 	char	*buffer;
@@ -42,7 +42,7 @@ char	*ft_get_file_content(char *file_name)
 	return (file_content);
 }
 
-int		ft_iswhitespace(char c)
+int			ft_iswhitespace(char c)
 {
 	if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' ||
 			c == '\r')
@@ -51,14 +51,14 @@ int		ft_iswhitespace(char c)
 		return (0);
 }
 
-int		ft_return(char *int_min, char *int_max, int ret)
+int			ft_return(char *int_min, char *int_max, int ret)
 {
 	free(int_min);
 	free(int_max);
 	return (ret);
 }
 
-int		ft_strisint(char *nbr)
+int			ft_strisint(char *nbr)
 {
 	int		i;
 	char	*int_min;

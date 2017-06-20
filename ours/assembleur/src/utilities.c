@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   utilities.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: niludwig <niludwig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 15:14:25 by niludwig          #+#    #+#             */
-/*   Updated: 2017/06/20 00:31:46 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/20 02:43:51 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <asm.h>
 
-void	ft_exit_msg(char *msg)
+void		ft_exit_msg(char *msg)
 {
 	ft_putendl_fd(msg, 2);
 	exit(1);
 }
 
-long	ft_atoi_oflow(char *str)
+long		ft_atoi_oflow(char *str)
 {
 	int		i;
 	int		sign;
@@ -43,7 +43,7 @@ long	ft_atoi_oflow(char *str)
 	return (ans * sign);
 }
 
-int		ft_jump_nextline(char *str, int i)
+int			ft_jump_nextline(char *str, int i)
 {
 	while (str[i] && str[i] != '\n')
 		i++;
@@ -54,7 +54,7 @@ int		ft_jump_nextline(char *str, int i)
 
 int			ft_strccpy(char *dst, char *src, char c)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (src[i] != c && src[i])
