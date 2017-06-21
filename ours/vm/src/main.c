@@ -95,8 +95,12 @@ void			play(t_global *global)
 	if (global->dump > 0)
 		ft_putbinary((char *)(global->arena), MEM_SIZE);
 	else
-		ft_putendl("youpi");
-		// show_winner(global);
+	{
+		endwin();
+		ft_printf("And the winner is : %s !\nSir, do you have anything to say to your fans ?\n-%s\n",
+			global->players[-(global->last_id) - 1]->name, 
+			global->players[-(global->last_id) - 1]->comment);
+	}
 }
 
 int			main(int ac, char **av)

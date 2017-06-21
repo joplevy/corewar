@@ -60,7 +60,7 @@ typedef enum	e_col
 	yellow_b,
 	b_yellow,
 	white_b,
-	b_white,
+	b_white
 }				t_col;
 
 typedef struct		s_param
