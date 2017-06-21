@@ -92,11 +92,11 @@ int				ft_get_params(unsigned char *arena, int adr, t_param **par, t_list *p)
 
 	inst = arena[adr];
 	i = -1;
-	ptr = adr + 2;
+	ptr = (adr + 2) % MEM_SIZE;
 	while (++i < g_op_tab[inst - 1].nb_param)
 	{
 		if (!((*par)[i].type = g_op_tab[inst - 1].param[i] \
-			& get_ptype(arena[adr + 1], i)))
+			& get_ptype(arena[(adr + 1) % MEM_SIZE], i)))
 			return (0);
 		len = get_type_siz((*par)[i].type, g_op_tab[inst - 1].label_size);
 		if ((*par)[i].type == T_REG && \
@@ -104,7 +104,7 @@ int				ft_get_params(unsigned char *arena, int adr, t_param **par, t_list *p)
 			return (0);
 		(*par)[i].val = ((*par)[i].type == T_REG) ? ft_get_reg(p, (*par)[i].reg) : 
 			ft_get_int(arena, ptr, len);
-		ptr += len;
+		ptr = (ptr + len) % MEM_SIZE;
 	}
 	return (ptr);
 }
@@ -117,7 +117,7 @@ void				ft_live(t_list *p, t_global *gb)
 {
 	int		id;
 
-	id = ft_get_int(gb->arena, ADR(p) + 1, 4);
+	id = ft_get_int(gb->arena, (ADR(p) + 1) % MEM_SIZE, 4);
 	if (id < 0 && id > -5)
 		gb->last_id = id;
 	LIVE(p)++;
@@ -287,8 +287,8 @@ void				ft_ldi(t_list *p, t_global *gb)
 	tab = malloc(sizeof(t_param) * 3);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), &tab, p)))
 	{
-		tab[0].val = (tab[0].type == T_IND) ? ft_get_int(gb->arena, \
-			(ADR(p) + (tab[1].val % IDX_MOD)) % MEM_SIZE, 2) : tab[0].val;
+		tab[0].val = (tab[0].type == T_IND) ? (short)ft_get_int(gb->arena, \
+			(ADR(p) + (tab[0].val % IDX_MOD)) % MEM_SIZE, 2) : tab[0].val;
 		res = ft_get_int(gb->arena, ((tab[0].val + tab[1].val) \
 			% IDX_MOD) % MEM_SIZE, 4);
 		ft_reg_write(p, tab[1].reg, res);
@@ -307,7 +307,7 @@ void				ft_sti(t_list *p, t_global *gb)
 	tab = malloc(sizeof(t_param) * 3);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), &tab, p)))
 	{
-		tab[1].val = (tab[1].type == T_IND) ? ft_get_int(gb->arena, \
+		tab[1].val = (tab[1].type == T_IND) ? (short)ft_get_int(gb->arena, \
 			(ADR(p) + (tab[1].val % IDX_MOD)) % MEM_SIZE, 2) : tab[1].val;
 		ft_int_write(gb->arena, (ADR(p) + ((tab[1].val + tab[2].val) % IDX_MOD)) % MEM_SIZE, \
 			tab[0].val, 4);
@@ -326,7 +326,7 @@ void				ft_fork(t_list *p, t_global *gb)
 	if (!(new = ft_lstnew((t_process *)(p->content), sizeof(t_process))))
 		return;
 	ft_lstadd(&(gb->procs), new);
-	ADR(new) = (ADR(p) + (ft_get_int(gb->arena, ADR(p) + 1, 2) % IDX_MOD)) % MEM_SIZE;
+	ADR(new) = (ADR(p) + ((short)ft_get_int(gb->arena, (ADR(p) + 1) % MEM_SIZE, 2) % IDX_MOD)) % MEM_SIZE;
 	OPC(new) = gb->arena[ADR(new)];
 	if (OPC(new) > 0 && OPC(new) < 17)
 		TIME(new) = OP_NBC(OPC(new));
@@ -362,8 +362,8 @@ void				ft_lldi(t_list *p, t_global *gb)
 	tab = malloc(sizeof(t_param) * 3);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), &tab, p)))
 	{
-		tab[0].val = (tab[0].type == T_IND) ? \
-		(ADR(p) + (short)(tab[0].val)) % MEM_SIZE : tab[0].val;
+		tab[0].val = (tab[0].type == T_IND) ? (short)ft_get_int(gb->arena, \
+			(ADR(p) + (tab[0].val % IDX_MOD)) % MEM_SIZE, 2): tab[0].val;
 		res = ft_get_int(gb->arena, (tab[0].val + tab[1].val) \
 			% MEM_SIZE, 4);
 		ft_reg_write(p, tab[1].reg, res);
@@ -382,7 +382,7 @@ void				ft_lfork(t_list *p, t_global *gb)
 	if (!(new = ft_lstnew((t_process *)(p->content), sizeof(t_process))))
 		return;
 	ft_lstadd(&(gb->procs), new);
-	ADR(new) = (ADR(p) + ft_get_int(gb->arena, ADR(p) + 1, 2)) % MEM_SIZE;
+	ADR(new) = (ADR(p) + (short)ft_get_int(gb->arena, (ADR(p) + 1) % MEM_SIZE, 2)) % MEM_SIZE;
 	OPC(new) = gb->arena[ADR(new)];
 	if (OPC(new) > 0 && OPC(new) < 17)
 		TIME(new) = OP_NBC(OPC(new));
