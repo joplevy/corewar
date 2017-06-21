@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   asm_get_param.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: niludwig <niludwig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/12 15:12:38 by niludwig          #+#    #+#             */
-/*   Updated: 2017/06/19 22:00:30 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/20 02:47:42 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,12 @@ void	ft_print_param(t_asm *asmb, t_inst *ins)
 			ft_putchar_fd_two((unsigned)ins->param[i] >> 8,
 									ins->param[i], asmb->fd);
 		else
-			ft_putchar_fd_quatro((unsigned)ins->param[i] >> 24,
-				ins->param[i] >> 16, ins->param[i] >> 8, ins->param[i],
+		{
+			ft_putchar_fd_two((unsigned)ins->param[i] >> 24,
+				ins->param[i] >> 16, asmb->fd);
+			ft_putchar_fd_two(ins->param[i] >> 8, ins->param[i],
 				asmb->fd);
+		}
 	}
 }
 
