@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/19 21:32:22 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/22 16:17:34 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,30 +44,28 @@ void			treat_all_procs(t_global *global)
 	tmp = global->procs;
 	while (tmp != NULL)
 	{
-		TIME(tmp)--;
-		if (TIME(tmp) == 0)
+		if (--(TIME(tmp)) == 0)
 		{
+		//	write(1, "time0\n", 6);
 			if (OPC(tmp) > 0 && OPC(tmp) < 17)
 			{
+		//		write(1, "exec\n", 5);
 				instructab[OPC(tmp) - 1](tmp, global);
-				if (global->show == 1)
-				{
-					global->col[ADR(tmp)] -= 1;
-					global->col[NEXT(tmp)] += 1;
-				}
-				ADR(tmp) = NEXT(tmp);
+		//		write(1, "exec\n", 5);
 			}
 			else
+				NEXT(tmp) = (ADR(tmp) + 1) % MEM_SIZE;
+			if (global->show == 1)
 			{
-				if (global->show == 1)
-				{
-					global->col[ADR(tmp)] -= 1;
-					global->col[ADR(tmp) + 1] += 1;
-				}
-				ADR(tmp)++;
+		//		write(1, "shw\n", 4);
+				global->col[ADR(tmp)] -= 1;
+				global->col[NEXT(tmp)] += 1;
+		//		write(1, "shw\n", 4);
 			}
+			ADR(tmp) = NEXT(tmp);
 			OPC(tmp) = global->arena[ADR(tmp)];
-			TIME(tmp) = OP_NBC(OPC(tmp));
+			TIME(tmp) = (OPC(tmp) > 0 && OPC(tmp) < 17 ? OP_NBC(OPC(tmp)) : 1);
+		//	write(1, "end\n", 4);
 		}
 		tmp = tmp->next;
 	}
@@ -82,24 +80,30 @@ void			play(t_global *global)
 	period = 0;
 	while (++cycles != global->dump && global->procs != NULL)
 	{
-		period += 1;
+	//	write(1, "\ntap\n", 5);
 		treat_all_procs(global);
-		if (period == global->ctd)
+	//	write(1, "tap\n", 4);
+		if ((++period) >= global->ctd)
 		{
+	//		write(1, "chk\n", 4);
 			check_lives(global);
+	//		write(1, "chk\n", 4);
 			period = 0;
 		}
 		if (global->show == 1)
+		{
+	//		write(1, "show\n", 5);
 			box_put_arena(global);
+	//		write(1, "show\n", 5);
+		}
 	}
 	if (global->dump > 0)
 		ft_putbinary((char *)(global->arena), MEM_SIZE);
 	else
 	{
 		endwin();
-		ft_printf("And the winner is : %s !\nSir, do you have anything to say to your fans ?\n-%s\n",
-			global->players[-(global->last_id) - 1]->name, 
-			global->players[-(global->last_id) - 1]->comment);
+		ft_printf("And the winner is : %s !\nSir, do you have anything to say to your fans ?\n-%s\n", global->players[-(global->last_id) - 1]->name, \
+				global->players[-(global->last_id) - 1]->comment);
 	}
 }
 

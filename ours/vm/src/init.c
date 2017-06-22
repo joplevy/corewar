@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 21:46:00 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/14 00:07:51 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/22 16:23:42 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int				load_players(t_global *gb)
 		ft_memcpy((void*)(gb->arena + pos), \
 					(const void*)((gb->players)[i])->code, \
 					(size_t)((gb->players)[i])->size);
-		if (!init_new_proc(gb, pos, -(i + 1)))
+		if (!init_new_proc(gb, pos, ((gb->players)[i])->id))
 			return (0);
 	}
  	return (1);

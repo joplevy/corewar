@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/18 23:49:39 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/22 19:00:47 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ typedef struct		s_process
 typedef struct		s_player
 {
 	int				id;
-	int				live;
 	int				size;
 	int				entry;
 	char			name[PROG_NAME_LENGTH];
