@@ -27,6 +27,7 @@
 # define CARRY(NODE) (((t_process*)((NODE)->content))->carry)
 # define LIVE(NODE) (((t_process*)((NODE)->content))->live)
 # define REG(NODE) (((t_process*)((NODE)->content))->regs)
+# define PID(NODE) (((t_process*)((NODE)->content))->pid)
 # define NEXT(NODE) (((t_process*)((NODE)->content))->next)
 
 # define OP_NAME(OP) (g_op_tab[OP - 1].name)
@@ -49,20 +50,6 @@ typedef enum		e_vmtype
 	terr
 }					t_vmtype;
 
-typedef enum	e_col
-{
-	green_b=1,
-	b_green,
-	red_b,
-	b_red,
-	blue_b,
-	b_blue,
-	yellow_b,
-	b_yellow,
-	white_b,
-	b_white
-}				t_col;
-
 typedef struct		s_param
 {
 	int				type;
@@ -72,6 +59,7 @@ typedef struct		s_param
 
 typedef struct		s_process
 {
+	short			pid;
 	int				carry;
 	int				live;
 	unsigned char	opc;
@@ -97,7 +85,7 @@ typedef struct 		s_global
 	t_list			*procs;
 	t_player		*players[MAX_PLAYERS + 1];
 	unsigned char	*arena;
-	t_col			*col;
+	short			*col;
 	WINDOW			*box;
 	int 			nb_process;
 	int				lives;

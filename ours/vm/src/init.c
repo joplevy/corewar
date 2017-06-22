@@ -59,6 +59,7 @@ int				init_new_proc(t_global *gb, int pos, int id)
 	int			i;
 	int			j;
 
+	proc.pid = -id;
 	proc.carry = 0;
 	proc.live = 0;
 	proc.opc = gb->arena[pos % MEM_SIZE];

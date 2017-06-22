@@ -13,6 +13,7 @@ ld -20, r4
 ld %-1, r2
 and r4, r2, r3
 st r3, 200
-fork %3
+fork %10
 ld %1, r5
+ld %0, r5
 zjmp %:start
