@@ -19,21 +19,21 @@ void				exit_message(char *str)
 
 static int        read_name(int fd, t_player *player)
 {
-    char    space[6];
+    char    space[7];
 
     if ((read(fd, player->name, PROG_NAME_LENGTH)) <= 0)
         return (0);
-    read(fd, space, 6);
+    read(fd, space, 7);
     return (1);
 }
 
 static int        read_comment(int fd, t_player *player)
 {
-    char    space[6];
+    char    space[5];
 
     if ((read(fd, player->comment, COMMENT_LENGTH)) <= 0)
         return (0);
-    read(fd, space, 6);
+    read(fd, space, 5);
     return (1);
 }
 
