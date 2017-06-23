@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/11 19:54:59 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/19 18:56:19 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/23 20:43:15 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ int					ft_get_int(unsigned char *arena, int adr, int size)
 	ret = 0;
 	i = -1;
 	while (++i < size)
-	{
-		ret = ret << 8;
-		ret += arena[(adr + i) % MEM_SIZE];
-	}
+		ret += arena[(adr + i) % MEM_SIZE] << ((size - (i + 1)) * 8);
 	return (ret);
 }
 
@@ -102,6 +99,8 @@ int				ft_get_params(unsigned char *arena, int adr, t_list *p)
 		if ((PAR(p)[i].type = g_op_tab[inst - 1].param[i] \
 			& get_ptype(arena[(adr + 1) % MEM_SIZE], i)) == 0)
 			return (0);
+		// ft_printf("inst = %X, param %d = %d\n", inst, i, g_op_tab[inst - 1].param[i] \
+			// & get_ptype(arena[(adr + 1) % MEM_SIZE], i));
 		if (!(len = get_type_siz(PAR(p)[i].type, g_op_tab[inst - 1].label_size)))
 			return (0);
 		if (PAR(p)[i].type == T_REG)
@@ -112,6 +111,16 @@ int				ft_get_params(unsigned char *arena, int adr, t_list *p)
 		ptr = (ptr + len) % MEM_SIZE;
 	}
 	return (ptr);
+}
+
+int					get_relative(int adr, int inc, int mod)
+{
+	int				ret;
+
+	inc = (mod ? inc % IDX_MOD : inc % MEM_SIZE);
+	if ((ret = adr + inc) < 0)
+		ret += MEM_SIZE;
+	return (ret % MEM_SIZE);
 }
 
 /*
@@ -132,18 +141,23 @@ void				ft_live(t_list *p, t_global *gb)
 void				ft_ld(t_list *p, t_global *gb)
 {
 	int		nxt;
+	int		adr;
 
+	// tab = malloc(sizeof(t_param) * 2);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), p)))
 	{
 		if (PAR(p)[0].type == T_IND)
-			PAR(p)[0].val = ft_get_int(gb->arena, \
-				(ADR(p) + ((short)(PAR(p)[0].val) % IDX_MOD)) % MEM_SIZE, 4);
-		CARRY(p) = (PAR(p)[0].val == 0) ? 1 : 0;
+		{
+			adr = get_relative(ADR(p), (short)(PAR(p)[0].val), 1);
+			PAR(p)[0].val = ft_get_int(gb->arena, adr, 4);
+		}
+		CARRY(p) = ((PAR(p)[0].val == 0) ? 1 : 0);
 		ft_reg_write(p, PAR(p)[1].reg, PAR(p)[0].val);
 		NEXT(p) = (nxt) % MEM_SIZE;
 	}
 	else
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+	// free(tab);
 }
 
 void				ft_st(t_list *p, t_global *gb)
@@ -158,7 +172,7 @@ void				ft_st(t_list *p, t_global *gb)
 			ft_reg_write(p, PAR(p)[1].reg, PAR(p)[0].val);
 		else
 		{
-			adr = (ADR(p) + ((short)PAR(p)[1].val % IDX_MOD)) % MEM_SIZE;
+			adr = get_relative(ADR(p), (short)(PAR(p)[1].val), 1);
 			ft_int_write(gb->arena, adr, PAR(p)[0].val, 4);
 			i = -1;
 			while (++i < 4)
@@ -176,6 +190,7 @@ void				ft_add(t_list *p, t_global *gb)
 	int		nxt;
 	int		res;
 
+	// tab = malloc(sizeof(t_param) * 3);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), p)))
 	{
 		res = PAR(p)[0].val + PAR(p)[1].val;
@@ -185,6 +200,7 @@ void				ft_add(t_list *p, t_global *gb)
 	}
 	else
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+	// free(tab);
 }
 
 void				ft_sub(t_list *p, t_global *gb)
@@ -192,6 +208,7 @@ void				ft_sub(t_list *p, t_global *gb)
 	int		nxt;
 	int		res;
 
+	// tab = malloc(sizeof(t_param) * 3);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), p)))
 	{
 		res = PAR(p)[0].val - PAR(p)[1].val;
@@ -201,19 +218,28 @@ void				ft_sub(t_list *p, t_global *gb)
 	}
 	else
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+	// free(tab);
 }
 
 void				ft_and(t_list *p, t_global *gb)
 {
 	int		nxt;
 	int		res;
+	int		adr;
 
+	// tab = malloc(sizeof(t_param) * 3);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), p)))
 	{
-		PAR(p)[0].val = (PAR(p)[0].type == T_IND) ? ft_get_int(gb->arena, \
-			(ADR(p) + (PAR(p)[0].val % IDX_MOD)) % MEM_SIZE, 4) : PAR(p)[0].val;
-		PAR(p)[1].val = (PAR(p)[1].type == T_IND) ? ft_get_int(gb->arena, \
-			(ADR(p) + (PAR(p)[1].val % IDX_MOD)) % MEM_SIZE, 4) : PAR(p)[1].val;
+		if (PAR(p)[0].type == T_IND)
+		{
+			adr = get_relative(ADR(p), PAR(p)[0].val, 1);
+			PAR(p)[0].val = ft_get_int(gb->arena, adr, 4);
+		}
+		if (PAR(p)[1].type == T_IND)
+		{
+			adr = get_relative(ADR(p), PAR(p)[1].val, 1);
+			PAR(p)[1].val = ft_get_int(gb->arena, adr, 4);
+		}
 		res = PAR(p)[0].val & PAR(p)[1].val;
 		CARRY(p) = (res == 0) ? 1 : 0;
 		ft_reg_write(p, PAR(p)[2].reg, res);
@@ -221,19 +247,28 @@ void				ft_and(t_list *p, t_global *gb)
 	}
 	else
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+	// free(tab);
 }
 
 void				ft_or(t_list *p, t_global *gb)
 {
 	int		nxt;
 	int		res;
+	int		adr;
 
+	// tab = malloc(sizeof(t_param) * 3);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), p)))
 	{
-		PAR(p)[0].val = (PAR(p)[0].type == T_IND) ? ft_get_int(gb->arena, \
-			(ADR(p) + (PAR(p)[0].val % IDX_MOD)) % MEM_SIZE, 4) : PAR(p)[0].val;
-		PAR(p)[1].val = (PAR(p)[1].type == T_IND) ? ft_get_int(gb->arena, \
-			(ADR(p) + (PAR(p)[1].val % IDX_MOD)) % MEM_SIZE, 4) : PAR(p)[1].val;
+		if (PAR(p)[0].type == T_IND)
+		{
+			adr = get_relative(ADR(p), PAR(p)[0].val, 1);
+			PAR(p)[0].val = ft_get_int(gb->arena, adr, 4);
+		}
+		if (PAR(p)[1].type == T_IND)
+		{
+			adr = get_relative(ADR(p), PAR(p)[1].val, 1);
+			PAR(p)[1].val = ft_get_int(gb->arena, adr, 4);
+		}
 		res = PAR(p)[0].val | PAR(p)[1].val;
 		CARRY(p) = (res == 0) ? 1 : 0;
 		ft_reg_write(p, PAR(p)[2].reg, res);
@@ -241,19 +276,28 @@ void				ft_or(t_list *p, t_global *gb)
 	}
 	else
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+	// free(tab);
 }
 
 void				ft_xor(t_list *p, t_global *gb)
 {
 	int		nxt;
 	int		res;
+	int		adr;
 
+	// tab = malloc(sizeof(t_param) * 3);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), p)))
 	{
-		PAR(p)[0].val = (PAR(p)[0].type == T_IND) ? ft_get_int(gb->arena, \
-			(ADR(p) + (PAR(p)[0].val % IDX_MOD)) % MEM_SIZE, 4) : PAR(p)[0].val;
-		PAR(p)[1].val = (PAR(p)[1].type == T_IND) ? ft_get_int(gb->arena, \
-			(ADR(p) + (PAR(p)[1].val % IDX_MOD)) % MEM_SIZE, 4) : PAR(p)[1].val;
+		if (PAR(p)[0].type == T_IND)
+		{
+			adr = get_relative(ADR(p), PAR(p)[0].val, 1);
+			PAR(p)[0].val = ft_get_int(gb->arena, adr, 4);
+		}
+		if (PAR(p)[1].type == T_IND)
+		{
+			adr = get_relative(ADR(p), PAR(p)[1].val, 1);
+			PAR(p)[1].val = ft_get_int(gb->arena, adr, 4);
+		}
 		res = PAR(p)[0].val ^ PAR(p)[1].val;
 		CARRY(p) = (res == 0) ? 1 : 0;
 		ft_reg_write(p, PAR(p)[2].reg, res);
@@ -261,12 +305,18 @@ void				ft_xor(t_list *p, t_global *gb)
 	}
 	else
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+	// free(tab);
 }
 
 void				ft_zjmp(t_list *p, t_global *gb)
 {
+	short			jump;
+
 	if (CARRY(p) == 1)
-		NEXT(p) = (ADR(p) + ((short)(ft_get_int(gb->arena, ADR(p) + 1, 2)) % IDX_MOD)) % MEM_SIZE;
+	{
+		jump = (short)ft_get_int(gb->arena, ADR(p) + 1, 2);
+		NEXT(p) = get_relative(ADR(p), jump, 1);
+	}
 	else
 		NEXT(p) = (ADR(p) + 3) % MEM_SIZE;
 }
@@ -274,19 +324,25 @@ void				ft_zjmp(t_list *p, t_global *gb)
 void				ft_ldi(t_list *p, t_global *gb)
 {
 	int		nxt;
+	int		adr;
 	int		res;
 
+	// tab = malloc(sizeof(t_param) * 3);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), p)))
 	{
-		PAR(p)[0].val = (PAR(p)[0].type == T_IND) ? (short)ft_get_int(gb->arena, \
-			(ADR(p) + (PAR(p)[0].val % IDX_MOD)) % MEM_SIZE, 2) : PAR(p)[0].val;
-		res = ft_get_int(gb->arena, ((PAR(p)[0].val + PAR(p)[1].val) \
-			% IDX_MOD) % MEM_SIZE, 4);
-		ft_reg_write(p, PAR(p)[1].reg, res);
+		if (PAR(p)[0].type == T_IND)
+		{
+			adr = get_relative(ADR(p), PAR(p)[0].val, 1);
+			PAR(p)[0].val = (short)ft_get_int(gb->arena, adr, 2);
+		}
+		adr = get_relative(ADR(p), PAR(p)[0].val + PAR(p)[1].val, 1);
+		res = ft_get_int(gb->arena, adr, 4);
+		ft_reg_write(p, PAR(p)[2].reg, res);
 		NEXT(p) = (nxt) % MEM_SIZE;
 	}
 	else
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+	// free(tab);
 }
 
 void				ft_sti(t_list *p, t_global *gb)
@@ -295,11 +351,15 @@ void				ft_sti(t_list *p, t_global *gb)
 	int		adr;
 	int		i;
 
+	// tab = malloc(sizeof(t_param) * 3);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), p)))
 	{
-		PAR(p)[1].val = (PAR(p)[1].type == T_IND) ? (short)ft_get_int(gb->arena, \
-			(ADR(p) + (PAR(p)[1].val % IDX_MOD)) % MEM_SIZE, 2) : PAR(p)[1].val;
-		adr = (ADR(p) + ((PAR(p)[1].val + PAR(p)[2].val) % IDX_MOD)) % MEM_SIZE;
+		if (PAR(p)[1].type == T_IND)
+		{
+			adr = get_relative(ADR(p), PAR(p)[1].val, 1);
+			PAR(p)[1].val = (short)ft_get_int(gb->arena, adr, 2);
+		}
+		adr = get_relative(ADR(p), PAR(p)[1].val + PAR(p)[2].val, 1);
 		ft_int_write(gb->arena, adr, PAR(p)[0].val, 4);
 		NEXT(p) = (nxt) % MEM_SIZE;
 		i = -1;
@@ -309,17 +369,20 @@ void				ft_sti(t_list *p, t_global *gb)
 	}
 	else
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+	// free(tab);
 }
 
 void				ft_fork(t_list *p, t_global *gb)
 {
 	t_list	*new;
+	short	jump;
 
 	NEXT(p) = (ADR(p) + 3) % MEM_SIZE;
 	if (!(new = ft_lstnew((t_process *)(p->content), sizeof(t_process))))
 		return;
 	ft_lstadd(&(gb->procs), new);
-	ADR(new) = (ADR(p) + ((short)ft_get_int(gb->arena, (ADR(p) + 1) % MEM_SIZE, 2) % IDX_MOD)) % MEM_SIZE;
+	jump = (short)ft_get_int(gb->arena, (ADR(p) + 1) % MEM_SIZE, 2);
+	ADR(new) = get_relative(ADR(p), jump, 1);
 	gb->col[ADR(new)] = (gb->col[ADR(new)] & 0xF0) | PID(p);
 	OPC(new) = gb->arena[ADR(new)];
 	if (OPC(new) > 0 && OPC(new) < 17)
@@ -331,46 +394,60 @@ void				ft_fork(t_list *p, t_global *gb)
 void				ft_lld(t_list *p, t_global *gb)
 {
 	int		nxt;
+	int		adr;
 
+	// tab = malloc(sizeof(t_param) * 2);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), p)))
 	{
-		PAR(p)[0].val = (PAR(p)[0].type == T_IND) ? ft_get_int(gb->arena, \
-			(ADR(p) + (short)(PAR(p)[0].val)) % MEM_SIZE, 4) : PAR(p)[0].val;
-		CARRY(p) = (PAR(p)[0].val == 0) ? 1 : 0;
+		if (PAR(p)[0].type == T_IND)
+		{
+			adr = get_relative(ADR(p), (short)(PAR(p)[0].val), 0);
+			PAR(p)[0].val = ft_get_int(gb->arena, adr, 4);
+		}
+		CARRY(p) = ((PAR(p)[0].val == 0) ? 1 : 0);
 		ft_reg_write(p, PAR(p)[1].reg, PAR(p)[0].val);
 		NEXT(p) = (nxt) % MEM_SIZE;
 	}
 	else
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+	// free(tab);
 }
 
 void				ft_lldi(t_list *p, t_global *gb)
 {
 	int		nxt;
+	int		adr;
 	int		res;
 
+	// tab = malloc(sizeof(t_param) * 3);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), p)))
 	{
-		PAR(p)[0].val = (PAR(p)[0].type == T_IND) ? (short)ft_get_int(gb->arena, \
-			(ADR(p) + (PAR(p)[0].val % IDX_MOD)) % MEM_SIZE, 2): PAR(p)[0].val;
-		res = ft_get_int(gb->arena, (PAR(p)[0].val + PAR(p)[1].val) \
-			% MEM_SIZE, 4);
-		ft_reg_write(p, PAR(p)[1].reg, res);
+		if (PAR(p)[0].type == T_IND)
+		{
+			adr = get_relative(ADR(p), PAR(p)[0].val, 0);
+			PAR(p)[0].val = (short)ft_get_int(gb->arena, adr, 2);
+		}
+		adr = get_relative(ADR(p), PAR(p)[0].val + PAR(p)[1].val, 0);
+		res = ft_get_int(gb->arena, adr, 4);
+		ft_reg_write(p, PAR(p)[2].reg, res);
 		NEXT(p) = (nxt) % MEM_SIZE;
 	}
 	else
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+	// free(tab);
 }
 
 void				ft_lfork(t_list *p, t_global *gb)
 {
 	t_list	*new;
+	short	jump;
 
 	NEXT(p) = (ADR(p) + 3) % MEM_SIZE;
 	if (!(new = ft_lstnew((t_process *)(p->content), sizeof(t_process))))
 		return;
 	ft_lstadd(&(gb->procs), new);
-	ADR(new) = (ADR(p) + (short)ft_get_int(gb->arena, (ADR(p) + 1) % MEM_SIZE, 2)) % MEM_SIZE;
+	jump = (short)ft_get_int(gb->arena, (ADR(p) + 1) % MEM_SIZE, 2);
+	ADR(new) = get_relative(ADR(p), jump, 0);
 	gb->col[ADR(new)] = (gb->col[ADR(new)] & 0xF0) | PID(p);
 	OPC(new) = gb->arena[ADR(new)];
 	if (OPC(new) > 0 && OPC(new) < 17)
@@ -383,6 +460,7 @@ void				ft_aff(t_list *p, t_global *gb)
 {
 	int		nxt;
 
+	// tab = malloc(sizeof(t_param) * 3);
 	if ((nxt = ft_get_params(gb->arena, ADR(p), p)))
 	{
 		ft_putchar((char)(PAR(p)[0].val % 256));
@@ -390,5 +468,6 @@ void				ft_aff(t_list *p, t_global *gb)
 	}
 	else
 		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
+	// free(tab);
 }
 
