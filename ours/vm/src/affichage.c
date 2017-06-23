@@ -95,6 +95,8 @@ void		ft_putbinary(char *str, int size)
 	while (++i < size)
 	{
 		ft_printf("%02x ", str[i] & 0xFF);
+		if (i == 1400)
+			ft_putchar('q');
 		if ((i + 1) % TAB_WIDTH == 0)
 			ft_putchar('\n');
 	}

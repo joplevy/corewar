@@ -27,6 +27,7 @@
 # define CARRY(NODE) (((t_process*)((NODE)->content))->carry)
 # define LIVE(NODE) (((t_process*)((NODE)->content))->live)
 # define REG(NODE) (((t_process*)((NODE)->content))->regs)
+# define PAR(NODE) (((t_process*)((NODE)->content))->par)
 # define PID(NODE) (((t_process*)((NODE)->content))->pid)
 # define NEXT(NODE) (((t_process*)((NODE)->content))->next)
 
@@ -41,15 +42,6 @@
 # define TAB_HEIGHT 64
 # define TAB_WIDTH 64
 
-typedef enum		e_vmtype
-{
-	tnul = 0,
-	dir,
-	ind,
-	reg,
-	terr
-}					t_vmtype;
-
 typedef struct		s_param
 {
 	int				type;
@@ -59,6 +51,7 @@ typedef struct		s_param
 
 typedef struct		s_process
 {
+	t_param			par[3];
 	short			pid;
 	int				carry;
 	int				live;
@@ -129,14 +122,6 @@ int					load_players(t_global *gb);
 int					init_new_proc(t_global *gb, int pos, int id);
 t_global			*init_global();
 t_opt				*opt_tab(void);
-
-/*
-**		get_param_lenght.c
-*/
-
-int					get_params_length(int adr, unsigned char *arena);
-t_vmtype			get_type(unsigned char ocp, int	pos);
-int					get_type_size(t_vmtype type);
 
 /*
 **		instructions
