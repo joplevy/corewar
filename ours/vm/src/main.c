@@ -22,7 +22,9 @@ void			check_lives(t_global *global)
 	{
 		next = tmp->next;
 		if (!LIVE(tmp))
+		{
 			ft_lstdelnode(&(global->procs), tmp, NULL);
+		}
 		else
 			LIVE(tmp) = 0;
 		tmp = next;
@@ -40,7 +42,9 @@ void			check_lives(t_global *global)
 void			treat_all_procs(t_global *global)
 {
 	t_list		*tmp;
+	int			i;
 
+	i = 0;
 	tmp = global->procs;
 	while (tmp != NULL)
 	{
@@ -57,14 +61,16 @@ void			treat_all_procs(t_global *global)
 				NEXT(tmp) = (ADR(tmp) + 1) % MEM_SIZE;
 		
 			global->col[ADR(tmp)] &= 0xF0;
-			global->col[NEXT(tmp)] |= PID(tmp);
+			global->col[NEXT(tmp)] = (global->col[NEXT(tmp)] & 0xF0) | PID(tmp);
 			ADR(tmp) = NEXT(tmp);
 			OPC(tmp) = global->arena[ADR(tmp)];
 			TIME(tmp) = (OPC(tmp) > 0 && OPC(tmp) < 17 ? OP_NBC(OPC(tmp)) : 1);
 		//	write(1, "end\n", 4);
 		}
 		tmp = tmp->next;
+		i++;
 	}
+	// ft_printf("%d\n", i);
 }
 
 void			play(t_global *global)
@@ -101,7 +107,7 @@ void			play(t_global *global)
 		ft_printf("And the winner is : %s !\n\
 Sir, do you have anything to say to your fans ?\n-%s\n",\
 global->players[-(global->last_id) - 1]->name, \
-				global->players[-(global->last_id) - 1]->comment);
+global->players[-(global->last_id) - 1]->comment);
 	}
 }
 
