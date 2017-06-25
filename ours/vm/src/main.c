@@ -24,11 +24,13 @@ void			check_lives(t_global *global)
 		if (!LIVE(tmp))
 		{
 			ft_lstdelnode(&(global->procs), tmp, NULL);
+			// ft_putchar('a');
 		}
 		else
 			LIVE(tmp) = 0;
 		tmp = next;
 	}
+	// ft_putchar('\n');
 	if (global->lives > NBR_LIVE || global->checks == MAX_CHECKS)
 	{
 		global->ctd -= CYCLE_DELTA;
@@ -99,8 +101,11 @@ void			play(t_global *global)
 	//		write(1, "show\n", 5);
 		}
 	}
-	if (global->dump > 0)
+	if (global->dump == cycles)
+	{
+		ft_printf("cycles %d\n", cycles);
 		ft_putbinary((char *)(global->arena), MEM_SIZE);
+	}
 	else
 	{
 		endwin();

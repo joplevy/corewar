@@ -99,8 +99,6 @@ int				ft_get_params(unsigned char *arena, int adr, t_list *p)
 		if ((PAR(p)[i].type = g_op_tab[inst - 1].param[i] \
 			& get_ptype(arena[(adr + 1) % MEM_SIZE], i)) == 0)
 			return (0);
-		// ft_printf("inst = %X, param %d = %d\n", inst, i, g_op_tab[inst - 1].param[i] \
-			// & get_ptype(arena[(adr + 1) % MEM_SIZE], i));
 		if (!(len = get_type_siz(PAR(p)[i].type, g_op_tab[inst - 1].label_size)))
 			return (0);
 		if (PAR(p)[i].type == T_REG)
@@ -135,6 +133,7 @@ void				ft_live(t_list *p, t_global *gb)
 	id = ft_get_int(gb->arena, (ADR(p) + 1) % MEM_SIZE, 4);
 	if (id < 0 && id > -5)
 		gb->last_id = id;
+	gb->lives++;
 	LIVE(p)++;
 	NEXT(p) = (ADR(p) + 5) % MEM_SIZE;
 }
