@@ -6,7 +6,7 @@
 #    By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/06 14:23:18 by niludwig          #+#    #+#              #
-#    Updated: 2017/06/25 04:02:12 by jplevy           ###   ########.fr        #
+#    Updated: 2017/06/25 05:34:22 by jplevy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,8 @@ VM_FILE = affichage.c \
 			get_info.c \
 			init.c \
 			instructab.c \
-			instructions.c \
+			get_params.c \
+			rd_rw.c \
 			main.c \
 			set_global.c \
 			instructions/ft_live.c \

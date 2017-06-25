@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/25 04:04:03 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/25 05:32:17 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ t_global			*init_global();
 t_opt				*opt_tab(void);
 
 /*
-**		instructions
+**		instructions/
 */
 
 void				ft_live(t_list *p, t_global *gb);
@@ -144,15 +144,25 @@ void				ft_lldi(t_list *p, t_global *gb);
 void				ft_lfork(t_list *p, t_global *gb);
 void				ft_aff(t_list *p, t_global *gb);
 
+
+/*
+**		rd_rw.c
+*/
+
+int					ft_get_int(unsigned char *arena, int adr, int size);
 void				ft_int_write(unsigned char *arena, int adr, int val, int size);
+void				ft_reg_write(t_list *p, int reg, int val);
+int					ft_get_reg_nb(unsigned char *arena, int adr);
+int					ft_get_reg_val(t_list *p, int reg);
+
+/*
+**		get_params.c
+*/
+
 int					get_relative(int adr, int inc, int mod);
 int					ft_get_params(unsigned char *arena, int adr, t_list *p);
-void				ft_reg_write(t_list *p, int reg, int val);
-int					ft_get_reg_val(t_list *p, int reg);
-int					ft_get_reg_nb(unsigned char *arena, int adr);
 int					get_ptype(unsigned char ocp, int pos);
 int					get_type_siz(int type, int label_size);
-int					ft_get_int(unsigned char *arena, int adr, int size);
 
 extern void 		(*instructab[17])(t_list *, t_global *);
 
