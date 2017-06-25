@@ -6,7 +6,7 @@
 #    By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/06 14:23:18 by niludwig          #+#    #+#              #
-#    Updated: 2017/06/20 00:05:23 by jplevy           ###   ########.fr        #
+#    Updated: 2017/06/25 04:02:12 by jplevy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,23 @@ VM_FILE = affichage.c \
 			instructab.c \
 			instructions.c \
 			main.c \
-			set_global.c
+			set_global.c \
+			instructions/ft_live.c \
+			instructions/ft_ld.c \
+			instructions/ft_st.c \
+			instructions/ft_add.c \
+			instructions/ft_sub.c \
+			instructions/ft_and.c \
+			instructions/ft_or.c \
+			instructions/ft_xor.c \
+			instructions/ft_zjmp.c \
+			instructions/ft_ldi.c \
+			instructions/ft_sti.c \
+			instructions/ft_fork.c \
+			instructions/ft_lld.c \
+			instructions/ft_lldi.c \
+			instructions/ft_lfork.c \
+			instructions/ft_aff.c
 VM_OBJ = $(VM_FILE:.c=.o)
 VM_DIR = ./vm/src/
 VM_OBJ_DIR = ./vm/dst/
@@ -68,6 +84,7 @@ $(OP_O): $(OP_C)
 
 $(VM_OBJ_DIR)%.o: $(VM_DIR)%.c
 	-@mkdir -p $(VM_OBJ_DIR)
+	-@mkdir -p $(VM_OBJ_DIR)/instructions
 	@$(CC) $(CFLAG) -o $@ -c $< -I./include
 
 $(ASM_OBJ_DIR)%.o: $(ASM_DIR)%.c
