@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/25 03:41:05 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/25 03:51:11 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/25 20:55:16 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void				ft_ldi(t_list *p, t_global *gb)
 		adr = get_relative(ADR(p), (short)PAR(p)[0].val + \
 			(short)PAR(p)[1].val, 1);
 		res = ft_get_int(gb->arena, adr, 4);
+		CARRY(p) = (res == 0) ? 1 : 0;
 		ft_reg_write(p, PAR(p)[2].reg, res);
 		NEXT(p) = (nxt) % MEM_SIZE;
 	}

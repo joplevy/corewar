@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/22 16:17:34 by rvan-der         ###   ########.fr       */
+/*   Updated: 2017/06/25 20:51:02 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,11 @@ void			check_lives(t_global *global)
 	{
 		next = tmp->next;
 		if (!LIVE(tmp))
-		{
 			ft_lstdelnode(&(global->procs), tmp, NULL);
-			// ft_putchar('a');
-		}
 		else
 			LIVE(tmp) = 0;
 		tmp = next;
 	}
-	// ft_putchar('\n');
 	if (global->lives > NBR_LIVE || global->checks == MAX_CHECKS)
 	{
 		global->ctd -= CYCLE_DELTA;
@@ -44,21 +40,14 @@ void			check_lives(t_global *global)
 void			treat_all_procs(t_global *global)
 {
 	t_list		*tmp;
-	int			i;
 
-	i = 0;
 	tmp = global->procs;
 	while (tmp != NULL)
 	{
 		if (--(TIME(tmp)) == 0)
 		{
-		//	write(1, "time0\n", 6);
 			if (OPC(tmp) > 0 && OPC(tmp) < 17)
-			{
-		//		write(1, "exec\n", 5);
 				instructab[OPC(tmp) - 1](tmp, global);
-		//		write(1, "exec\n", 5);
-			}
 			else
 				NEXT(tmp) = (ADR(tmp) + 1) % MEM_SIZE;
 		
@@ -67,12 +56,9 @@ void			treat_all_procs(t_global *global)
 			ADR(tmp) = NEXT(tmp);
 			OPC(tmp) = global->arena[ADR(tmp)];
 			TIME(tmp) = (OPC(tmp) > 0 && OPC(tmp) < 17 ? OP_NBC(OPC(tmp)) : 1);
-		//	write(1, "end\n", 4);
 		}
 		tmp = tmp->next;
-		i++;
 	}
-	// ft_printf("%d\n", i);
 }
 
 void			play(t_global *global)
@@ -84,28 +70,17 @@ void			play(t_global *global)
 	period = 0;
 	while (++cycles != global->dump && global->procs != NULL)
 	{
-	//	write(1, "\ntap\n", 5);
 		treat_all_procs(global);
-	//	write(1, "tap\n", 4);
 		if ((++period) >= global->ctd)
 		{
-	//		write(1, "chk\n", 4);
 			check_lives(global);
-	//		write(1, "chk\n", 4);
 			period = 0;
 		}
 		if (global->show == 1)
-		{
-	//		write(1, "show\n", 5);
 			box_put_arena(global);
-	//		write(1, "show\n", 5);
-		}
 	}
 	if (global->dump == cycles)
-	{
-		ft_printf("cycles %d\n", cycles);
 		ft_putbinary((char *)(global->arena), MEM_SIZE);
-	}
 	else
 	{
 		endwin();

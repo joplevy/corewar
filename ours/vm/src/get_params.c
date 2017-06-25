@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/25 05:07:52 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/25 05:08:39 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/25 21:36:33 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int					get_ptype(unsigned char ocp, int pos)
 
 int				get_relative(int adr, int inc, int mod)
 {
-	int				ret;
+	int		ret;
 
 	inc = (mod) ? inc % IDX_MOD : inc;
 	ret = adr + inc;

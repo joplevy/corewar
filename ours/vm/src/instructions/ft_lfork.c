@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/25 03:41:40 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/25 03:53:43 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/25 21:07:00 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void				ft_lfork(t_list *p, t_global *gb)
 	ADR(new) = get_relative(ADR(p), jump, 0);
 	gb->col[ADR(new)] = (gb->col[ADR(new)] & 0xF0) | PID(p);
 	OPC(new) = gb->arena[ADR(new)];
+	CARRY(p) = 1;
 	if (OPC(new) > 0 && OPC(new) < 17)
 		TIME(new) = OP_NBC(OPC(new));
 	else
