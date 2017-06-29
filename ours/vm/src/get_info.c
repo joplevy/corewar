@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   get_info.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
+/*   By: joeyplev <joeyplev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/07 13:58:39 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/05/09 20:11:29 by joeyplevy        ###   ########.fr       */
+/*   Created: 2017/05/07 13:58:39 by joeyplev          #+#    #+#             */
+/*   Updated: 2017/06/29 18:45:27 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <corewar.h>
 
 void				exit_message(char *str)
@@ -19,28 +20,36 @@ void				exit_message(char *str)
 
 static int        read_name(int fd, t_player *player)
 {
-    char    space[7];
+    char    space[6];
 
     if ((read(fd, player->name, PROG_NAME_LENGTH)) <= 0)
         return (0);
-    read(fd, space, 7);
+    read(fd, space, 6);
     return (1);
 }
 
 static int        read_comment(int fd, t_player *player)
 {
-    char    space[5];
+    char    space[6];
 
     if ((read(fd, player->comment, COMMENT_LENGTH)) <= 0)
         return (0);
-    read(fd, space, 5);
+    read(fd, space, 6);
     return (1);
 }
 
 static int        read_code(int fd, t_player *player)
 {
+	char		*s;
+
+	s = NULL;
     if ((player->size = read(fd, player->code, CHAMP_MAX_SIZE)) <= 0)
         return (0);
+	if (read(fd, s, 1) < 0)
+	{
+		ft_printf("Error : champ %s is to large.\n", player->name);
+		return (0);
+	}
     return (1);
 }
 

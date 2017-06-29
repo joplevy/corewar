@@ -3,19 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: joeyplev <joeyplev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/29 14:51:10 by rvan-der         ###   ########.fr       */
+/*   Created: 2017/05/07 17:00:57 by joeyplev          #+#    #+#             */
+/*   Updated: 2017/06/29 18:47:52 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
-void			check_lives(t_global *global)
+/*
+pas toucher a ma fonction !!!!!!!
+*/
+
+static void			print_com(char *comment)
 {
-	t_list		*tmp;
-	t_list		*next;
+	int				i;
+
+	i = 1;
+	while(++i && comment[i] != '\0')
+		ft_putchar(comment[i]);
+	ft_putchar('\n');
+}
+/*
+pas toucher again
+*/
+
+void				check_lives(t_global *global)
+{
+	t_list			*tmp;
+	t_list			*next;
 
 	tmp = global->procs;
 	while (tmp != NULL)
@@ -37,9 +54,9 @@ void			check_lives(t_global *global)
 	global->lives = 0;
 }
 
-void			treat_all_procs(t_global *global)
+void				treat_all_procs(t_global *global)
 {
-	t_list		*tmp;
+	t_list			*tmp;
 
 	tmp = global->procs;
 	while (tmp != NULL)
@@ -61,10 +78,10 @@ void			treat_all_procs(t_global *global)
 	}
 }
 
-void			announce_winner(t_global *gb)
+void				announce_winner(t_global *gb)
 {
-	int			i;
-	t_player	*winner;
+	int				i;
+	t_player		*winner;
 
 	if (gb->show)
 		endwin();
@@ -84,14 +101,14 @@ void			announce_winner(t_global *gb)
 	{
 		ft_printf("And the winner is : %s!\n", winner->name);
 		ft_printf("Sir, do you have anything to say to your fans ?\n");
-		ft_printf("-%s\n", winner->comment);
+		print_com(gb->players[-(gb->last_id) - 1]->comment);
 	}
 }
 
-void			play(t_global *global, struct timespec speed)
+void				play(t_global *global, struct timespec speed)
 {
-	int			cycles;
-	int			period;
+	int				cycles;
+	int				period;
 
 	cycles = -1;
 	period = 0;
@@ -115,7 +132,7 @@ void			play(t_global *global, struct timespec speed)
 		announce_winner(global);
 }
 
-int			main(int ac, char **av)
+int					main(int ac, char **av)
 {
 	t_global		*global;
 	t_list			*args;
@@ -133,6 +150,7 @@ int			main(int ac, char **av)
 	free(tab);
 	if (!set_global(args, global))
 		return (0);
+	ft_putstr("Introducing contestants...\n");
 	tmp = global->procs;
 	init_ncurses(global);
 	play(global, speed);
@@ -140,4 +158,3 @@ int			main(int ac, char **av)
 		end_ncurses(global->box);
 	return (0);
 }
-
