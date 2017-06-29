@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_global.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
+/*   By: joeyplev <joeyplev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/20 21:31:47 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/29 14:43:30 by rvan-der         ###   ########.fr       */
+/*   Created: 2017/04/20 21:31:47 by joeyplev          #+#    #+#             */
+/*   Updated: 2017/06/29 19:44:35 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ static int		check_double(t_player **players)
 	{
 		j = i;
 		while ((players[i])->id != 0 && players[++j] != NULL)
+		{
 			if ((players[j])->id == (players[i])->id)
 				return (0);
+		}
 	}
 	return (1);
 }
@@ -60,8 +62,7 @@ int				get_player(t_global *global, int pid, t_list *list)
 
 	arg = (t_parg*)(list->content);
 	if (arg->fd <= 2 || pid > MAX_PLAYERS || pid < (-1 * MAX_PLAYERS))
-		return(0);
-	//	return(open_error(arg));
+		return (0);
 	i = 0;
 	while ((global->players)[i] != NULL)
 		i++;
@@ -70,7 +71,6 @@ int				get_player(t_global *global, int pid, t_list *list)
 		close(arg->fd);
 		return (0);
 	}
-	//	return (malloc_err());
 	((global->players)[i])->id = (pid > 0 ? pid * -1 : pid);
 	if (!get_info_player(arg->fd, (global->players)[i]))
 	{
@@ -81,9 +81,9 @@ int				get_player(t_global *global, int pid, t_list *list)
 	return (1);
 }
 
-int			set_global(t_list *args, t_global *gb)
+int				set_global(t_list *args, t_global *gb)
 {
-	t_list	*a;
+	t_list		*a;
 
 	a = args;
 	while (a != NULL)

@@ -6,13 +6,13 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/25 05:07:52 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/25 21:36:33 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/29 19:35:56 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
-int			get_type_siz(int type, int label_size)
+int				get_type_siz(int type, int label_size)
 {
 	if (type == T_IND)
 		return (IND_SIZE);
@@ -23,9 +23,9 @@ int			get_type_siz(int type, int label_size)
 	return (0);
 }
 
-int					get_ptype(unsigned char ocp, int pos)
+int				get_ptype(unsigned char ocp, int pos)
 {
-	int		cp;
+	int			cp;
 
 	cp = ocp >> (6 - (pos * 2));
 	if ((cp & 0x03) == IND_CODE)
@@ -39,7 +39,7 @@ int					get_ptype(unsigned char ocp, int pos)
 
 int				get_relative(int adr, int inc, int mod)
 {
-	int		ret;
+	int			ret;
 
 	inc = (mod) ? inc % IDX_MOD : inc;
 	ret = adr + inc;
@@ -50,10 +50,10 @@ int				get_relative(int adr, int inc, int mod)
 
 int				ft_get_params(unsigned char *arena, int adr, t_list *p)
 {
-	int 		inst;
-	int 		i;
-	int 		ptr;
-	int 		len;
+	int			inst;
+	int			i;
+	int			ptr;
+	int			len;
 
 	ft_bzero(PAR(p), sizeof(t_param) * 3);
 	inst = arena[adr];
@@ -64,13 +64,14 @@ int				ft_get_params(unsigned char *arena, int adr, t_list *p)
 		if ((PAR(p)[i].type = g_op_tab[inst - 1].param[i] \
 			& get_ptype(arena[(adr + 1) % MEM_SIZE], i)) == 0)
 			return (0);
-		if (!(len = get_type_siz(PAR(p)[i].type, g_op_tab[inst - 1].label_size)))
+		if (!(len = get_type_siz(PAR(p)[i].type,
+			g_op_tab[inst - 1].label_size)))
 			return (0);
 		if (PAR(p)[i].type == T_REG)
 			if (!(PAR(p)[i].reg = ft_get_reg_nb(arena, ptr)))
-				return(0);
-		PAR(p)[i].val = (PAR(p)[i].type == T_REG) ? ft_get_reg_val(p, PAR(p)[i].reg) : 
-			ft_get_int(arena, ptr, len);
+				return (0);
+		PAR(p)[i].val = (PAR(p)[i].type == T_REG)
+			? ft_get_reg_val(p, PAR(p)[i].reg) : ft_get_int(arena, ptr, len);
 		ptr = (ptr + len) % MEM_SIZE;
 	}
 	return (ptr);

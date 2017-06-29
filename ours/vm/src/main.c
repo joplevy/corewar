@@ -6,28 +6,21 @@
 /*   By: joeyplev <joeyplev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplev          #+#    #+#             */
-/*   Updated: 2017/06/29 18:47:52 by niludwig         ###   ########.fr       */
+/*   Updated: 2017/06/29 19:47:40 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
-
-/*
-pas toucher a ma fonction !!!!!!!
-*/
 
 static void			print_com(char *comment)
 {
 	int				i;
 
 	i = 1;
-	while(++i && comment[i] != '\0')
+	while (++i && comment[i] != '\0')
 		ft_putchar(comment[i]);
 	ft_putchar('\n');
 }
-/*
-pas toucher again
-*/
 
 void				check_lives(t_global *global)
 {
@@ -67,7 +60,6 @@ void				treat_all_procs(t_global *global)
 				instructab[OPC(tmp) - 1](tmp, global);
 			else
 				NEXT(tmp) = (ADR(tmp) + 1) % MEM_SIZE;
-
 			global->col[ADR(tmp)] &= 0xF0;
 			global->col[NEXT(tmp)] = (global->col[NEXT(tmp)] & 0xF0) | PID(tmp);
 			ADR(tmp) = NEXT(tmp);

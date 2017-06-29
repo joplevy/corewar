@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   affichage.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: joeyplev <joeyplev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/14 14:12:41 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/13 21:51:05 by jplevy           ###   ########.fr       */
+/*   Created: 2017/05/14 14:12:41 by joeyplev          #+#    #+#             */
+/*   Updated: 2017/06/29 19:33:28 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
-void	box_put_arena(t_global  *all)
+void		box_put_arena(t_global *all)
 {
 	int		i;
 	int		x;
@@ -25,7 +25,7 @@ void	box_put_arena(t_global  *all)
 		x = i % TAB_WIDTH;
 		y = i / TAB_WIDTH;
 		wmove(all->box, y + 1, (x * 3) + 2);
-		col = ((all->col[i] & 0xF) == ((all->col[i] & 0xF0) >> 4)) ? 
+		col = ((all->col[i] & 0xF) == ((all->col[i] & 0xF0) >> 4)) ?
 		all->col[i] & 0xF : all->col[i];
 		wattron(all->box, COLOR_PAIR(col));
 		wprintw(all->box, "%02x", all->arena[i]);
@@ -34,7 +34,7 @@ void	box_put_arena(t_global  *all)
 	wrefresh(all->box);
 }
 
-void	end_ncurses(WINDOW *box)
+void		end_ncurses(WINDOW *box)
 {
 	getch();
 	delwin(box);
@@ -49,13 +49,14 @@ void		color_init(t_global *all)
 	int		imnp;
 
 	if (!(all->col = (ft_memalloc(MEM_SIZE * sizeof(short)))))
-		return;
+		return ;
 	i = -1;
 	mnp = MEM_SIZE / all->nb_pl;
 	while (++i < MEM_SIZE)
 	{
 		imnp = i / mnp;
-		p = (i == imnp * mnp) ? ((imnp + 1) << 4) | (imnp + 1) : (imnp + 1) << 4;
+		p = (i == imnp * mnp) ? ((imnp + 1) << 4)
+			| (imnp + 1) : (imnp + 1) << 4;
 		if (imnp < all->nb_pl && \
 			i >= imnp * mnp && i < imnp * mnp + all->players[imnp]->size)
 			all->col[i] = p;
@@ -71,7 +72,7 @@ void		init_ncurses(t_global *all)
 
 	color_init(all);
 	if (all->show != 1)
-		return;
+		return ;
 	initscr();
 	curs_set(0);
 	refresh();

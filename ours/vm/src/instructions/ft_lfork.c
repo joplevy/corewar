@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/25 03:41:40 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/25 21:07:00 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/29 19:51:55 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void				ft_lfork(t_list *p, t_global *gb)
 
 	NEXT(p) = (ADR(p) + 3) % MEM_SIZE;
 	if (!(new = ft_lstnew((t_process *)(p->content), sizeof(t_process))))
-		return;
+		return ;
 	ft_lstadd(&(gb->procs), new);
 	jump = (short)ft_get_int(gb->arena, (ADR(p) + 1) % MEM_SIZE, 2);
 	ADR(new) = get_relative(ADR(p), jump, 0);

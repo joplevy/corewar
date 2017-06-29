@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: joeyplev <joeyplev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/05/25 21:46:00 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/29 14:53:57 by rvan-der         ###   ########.fr       */
+/*   Created: 2017/05/25 21:46:00 by joeyplev          #+#    #+#             */
+/*   Updated: 2017/06/29 19:45:34 by niludwig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
-t_opt		*opt_tab(void)
+t_opt			*opt_tab(void)
 {
 	t_opt		*ret;
 
@@ -21,7 +21,7 @@ t_opt		*opt_tab(void)
 	(ret[0]).name = "p";
 	(ret[0]).args = "if";
 	(ret[1]).name = "n";
-	(ret[1]).args =  "";
+	(ret[1]).args = "";
 	(ret[2]).name = "dump";
 	(ret[2]).args = "i";
 	(ret[3]).name = "v";
@@ -31,7 +31,7 @@ t_opt		*opt_tab(void)
 	return (ret);
 }
 
-t_global	*init_global()
+t_global		*init_global(void)
 {
 	t_global	*ret;
 	int			i;
@@ -83,14 +83,13 @@ int				init_new_proc(t_global *gb, int pos, int id)
 	return (1);
 }
 
-
 int				load_players(t_global *gb)
 {
 	int			i;
 	int			pos;
 	int			modulo;
 
-	pos = -1 * (MEM_SIZE  / gb->nb_pl);
+	pos = (-1 * (MEM_SIZE / gb->nb_pl));
 	modulo = MEM_SIZE % gb->nb_pl;
 	i = -1;
 	while (++i < gb->nb_pl)
@@ -102,5 +101,5 @@ int				load_players(t_global *gb)
 		if (!init_new_proc(gb, pos, ((gb->players)[i])->id))
 			return (0);
 	}
- 	return (1);
+	return (1);
 }
