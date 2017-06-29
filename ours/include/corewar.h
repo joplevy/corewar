@@ -6,12 +6,13 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/25 05:32:17 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/29 14:50:30 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COREWAR_H
 # define COREWAR_H
+# include <time.h>
 # include <errno.h>
 # include <limits.h>
 # include <unistd.h>
@@ -39,6 +40,7 @@
 # define OP_OCP(OP) (g_op_tab[OP - 1].ocp)
 # define OP_LAB(OP) (g_op_tab[OP - 1].label_size)
 
+# define SPEED (1000000000 / 60)
 # define TAB_HEIGHT 64
 # define TAB_WIDTH 64
 
@@ -75,19 +77,20 @@ typedef struct		s_player
 
 typedef struct 		s_global
 {
-	t_list			*procs;
-	t_player		*players[MAX_PLAYERS + 1];
 	unsigned char	*arena;
+	t_list			*procs;
+	int 			nb_process;
+	t_player		*players[MAX_PLAYERS + 1];
+	int 			nb_pl;
 	short			*col;
 	WINDOW			*box;
-	int 			nb_process;
 	int				lives;
 	int				last_id;
 	int				ctd;
 	int				checks;
 	int				dump;
 	int				show;
-	int 			nb_pl;
+	int				aff;
 }					t_global;
 
 /*

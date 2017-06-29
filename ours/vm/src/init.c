@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 21:46:00 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/22 16:23:42 by rvan-der         ###   ########.fr       */
+/*   Updated: 2017/06/29 14:53:57 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_opt		*opt_tab(void)
 {
 	t_opt		*ret;
 
-	if ((ret = (t_opt*)malloc(sizeof(t_opt) * 4)) == NULL)
+	if ((ret = (t_opt*)malloc(sizeof(t_opt) * 5)) == NULL)
 		return (NULL);
 	(ret[0]).name = "p";
 	(ret[0]).args = "if";
@@ -24,8 +24,10 @@ t_opt		*opt_tab(void)
 	(ret[1]).args =  "";
 	(ret[2]).name = "dump";
 	(ret[2]).args = "i";
-	(ret[3]).name = "";
+	(ret[3]).name = "v";
 	(ret[3]).args = "";
+	(ret[4]).name = "";
+	(ret[4]).args = "";
 	return (ret);
 }
 
@@ -48,6 +50,7 @@ t_global	*init_global()
 	ret->checks = 0;
 	ret->dump = -2;
 	ret->show = 0;
+	ret->aff = 0;
 	ret->nb_pl = 0;
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/25 20:51:02 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/29 14:51:10 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void			treat_all_procs(t_global *global)
 				instructab[OPC(tmp) - 1](tmp, global);
 			else
 				NEXT(tmp) = (ADR(tmp) + 1) % MEM_SIZE;
-		
+
 			global->col[ADR(tmp)] &= 0xF0;
 			global->col[NEXT(tmp)] = (global->col[NEXT(tmp)] & 0xF0) | PID(tmp);
 			ADR(tmp) = NEXT(tmp);
@@ -61,7 +61,34 @@ void			treat_all_procs(t_global *global)
 	}
 }
 
-void			play(t_global *global)
+void			announce_winner(t_global *gb)
+{
+	int			i;
+	t_player	*winner;
+
+	if (gb->show)
+		endwin();
+	winner = NULL;
+	i = -1;
+	while (++i < gb->nb_pl)
+	{
+		if (((gb->players)[i])->id == gb->last_id)
+		{
+			winner = (gb->players)[i];
+			break ;
+		}
+	}
+	if (!winner)
+		ft_printf("No winner for this match!\n");
+	else
+	{
+		ft_printf("And the winner is : %s!\n", winner->name);
+		ft_printf("Sir, do you have anything to say to your fans ?\n");
+		ft_printf("-%s\n", winner->comment);
+	}
+}
+
+void			play(t_global *global, struct timespec speed)
 {
 	int			cycles;
 	int			period;
@@ -77,27 +104,27 @@ void			play(t_global *global)
 			period = 0;
 		}
 		if (global->show == 1)
+		{
 			box_put_arena(global);
+			nanosleep(&speed, &speed);
+		}
 	}
 	if (global->dump == cycles)
 		ft_putbinary((char *)(global->arena), MEM_SIZE);
 	else
-	{
-		endwin();
-		ft_printf("And the winner is : %s !\n\
-Sir, do you have anything to say to your fans ?\n-%s\n",\
-global->players[-(global->last_id) - 1]->name, \
-global->players[-(global->last_id) - 1]->comment);
-	}
+		announce_winner(global);
 }
 
 int			main(int ac, char **av)
 {
-	t_global	*global;
-	t_list		*args;
-	t_list		*tmp;
-	t_opt		*tab;
+	t_global		*global;
+	t_list			*args;
+	t_list			*tmp;
+	t_opt			*tab;
+	struct timespec	speed;
 
+	speed.tv_sec = 0;
+	speed.tv_nsec = SPEED;
 	tab = opt_tab();
 	if (!(global = init_global()))
 		return (0);
@@ -107,8 +134,8 @@ int			main(int ac, char **av)
 	if (!set_global(args, global))
 		return (0);
 	tmp = global->procs;
-		init_ncurses(global);
-	play(global);
+	init_ncurses(global);
+	play(global, speed);
 	if (global->show == 1)
 		end_ncurses(global->box);
 	return (0);

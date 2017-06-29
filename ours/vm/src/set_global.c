@@ -6,7 +6,7 @@
 /*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 21:31:47 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/19 19:01:43 by rvan-der         ###   ########.fr       */
+/*   Updated: 2017/06/29 14:43:30 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ int			set_global(t_list *args, t_global *gb)
 				gb->dump = ((t_parg*)a->content)->val;
 			else if (ft_strequ(((t_parg*)a->content)->opt, "n"))
 				gb->show = 1;
+			else if (ft_strequ(((t_parg*)a->content)->opt, "v"))
+				gb->aff = 1;
 			else if (++(gb->nb_pl) > MAX_PLAYERS || !get_player(gb, \
 						((t_parg*)(a->next->content))->val, a->next->next) || \
 						!(a = a->next->next))
