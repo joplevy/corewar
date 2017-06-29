@@ -6,13 +6,13 @@
 /*   By: joeyplev <joeyplev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 21:31:47 by joeyplev          #+#    #+#             */
-/*   Updated: 2017/06/29 19:44:35 by niludwig         ###   ########.fr       */
+/*   Updated: 2017/06/29 22:45:31 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
-static int		check_double(t_player **players)
+static int		check_ids(t_player **players, t_global *gb)
 {
 	int			i;
 	int			j;
@@ -20,6 +20,8 @@ static int		check_double(t_player **players)
 	i = -1;
 	while (players[++i] != NULL)
 	{
+		if ((-1 * players[i]->id) > gb->nb_pl)
+			return (0);
 		j = i;
 		while ((players[i])->id != 0 && players[++j] != NULL)
 		{
@@ -30,13 +32,13 @@ static int		check_double(t_player **players)
 	return (1);
 }
 
-int				set_players_id(t_player **players)
+int				set_players_id(t_player **players, t_global *gb)
 {
 	int			i;
 	int			j;
 	int			pid;
 
-	if (!check_double(players))
+	if (!check_ids(players, gb))
 		return (0);
 	i = -1;
 	pid = -1;
@@ -105,7 +107,7 @@ int				set_global(t_list *args, t_global *gb)
 			return (0);
 		a = a->next;
 	}
-	if (!set_players_id((t_player**)gb->players) || !load_players(gb))
+	if (!set_players_id((t_player**)gb->players, gb) || !load_players(gb))
 		return (0);
 	return (1);
 }

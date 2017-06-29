@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 21:46:00 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/29 22:01:11 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/29 22:46:43 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,26 +77,4 @@ int				init_new_proc(t_global *gb, int pos, int id)
 		ft_get_params(gb->arena, new) : (ADR(new) + 1) % MEM_SIZE;
 	ft_lstadd(&(gb->procs), new);
 	return (1);
-}
-
-
-int				load_players(t_global *gb)
-{
-	int			i;
-	int			pos;
-	int			modulo;
-
-	pos = -1 * (MEM_SIZE  / gb->nb_pl);
-	modulo = MEM_SIZE % gb->nb_pl;
-	i = -1;
-	while (++i < gb->nb_pl)
-	{
-		pos += (MEM_SIZE / gb->nb_pl);
-		ft_memcpy((void*)(gb->arena + pos), \
-					(const void*)((gb->players)[i])->code, \
-					(size_t)((gb->players)[i])->size);
-		if (!init_new_proc(gb, pos, ((gb->players)[i])->id))
-			return (0);
-	}
- 	return (1);
 }
