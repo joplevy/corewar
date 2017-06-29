@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joeyplev <joeyplev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplev          #+#    #+#             */
-/*   Updated: 2017/06/29 19:47:40 by niludwig         ###   ########.fr       */
+/*   Updated: 2017/06/29 22:28:53 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,24 +47,25 @@ void				check_lives(t_global *global)
 	global->lives = 0;
 }
 
-void				treat_all_procs(t_global *global)
+void			treat_all_procs(t_global *global)
 {
-	t_list			*tmp;
+	t_list		*tmp;
 
 	tmp = global->procs;
 	while (tmp != NULL)
 	{
 		if (--(TIME(tmp)) == 0)
 		{
-			if (OPC(tmp) > 0 && OPC(tmp) < 17)
+			if (OPC(tmp) > 0 && OPC(tmp) < 17 && NEXT(tmp) \
+				!= ((ADR(tmp) + 1) % MEM_SIZE))
 				instructab[OPC(tmp) - 1](tmp, global);
-			else
-				NEXT(tmp) = (ADR(tmp) + 1) % MEM_SIZE;
 			global->col[ADR(tmp)] &= 0xF0;
 			global->col[NEXT(tmp)] = (global->col[NEXT(tmp)] & 0xF0) | PID(tmp);
 			ADR(tmp) = NEXT(tmp);
 			OPC(tmp) = global->arena[ADR(tmp)];
 			TIME(tmp) = (OPC(tmp) > 0 && OPC(tmp) < 17 ? OP_NBC(OPC(tmp)) : 1);
+			NEXT(tmp) = (OPC(tmp) > 0 && OPC(tmp) < 17) ? \
+			ft_get_params(global->arena, tmp) : (ADR(tmp) + 1) % MEM_SIZE;
 		}
 		tmp = tmp->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/29 14:50:30 by rvan-der         ###   ########.fr       */
+/*   Updated: 2017/06/29 22:31:42 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,19 @@ typedef struct		s_player
 
 typedef struct 		s_global
 {
-	unsigned char	*arena;
 	t_list			*procs;
-	int 			nb_process;
 	t_player		*players[MAX_PLAYERS + 1];
-	int 			nb_pl;
+	unsigned char	*arena;
 	short			*col;
 	WINDOW			*box;
+	int 			nb_process;
 	int				lives;
 	int				last_id;
 	int				ctd;
 	int				checks;
 	int				dump;
 	int				show;
+	int 			nb_pl;
 	int				aff;
 }					t_global;
 
@@ -122,6 +122,7 @@ int					set_global(t_list *args, t_global *gb);
 */
 
 int					load_players(t_global *gb);
+// here
 int					init_new_proc(t_global *gb, int pos, int id);
 t_global			*init_global();
 t_opt				*opt_tab(void);
@@ -140,10 +141,13 @@ void				ft_or(t_list *p, t_global *gb);
 void				ft_xor(t_list *p, t_global *gb);
 void				ft_zjmp(t_list *p, t_global *gb);
 void				ft_ldi(t_list *p, t_global *gb);
+// here
 void				ft_sti(t_list *p, t_global *gb);
+// here
 void				ft_fork(t_list *p, t_global *gb);
 void				ft_lld(t_list *p, t_global *gb);
 void				ft_lldi(t_list *p, t_global *gb);
+// here
 void				ft_lfork(t_list *p, t_global *gb);
 void				ft_aff(t_list *p, t_global *gb);
 
@@ -163,7 +167,11 @@ int					ft_get_reg_val(t_list *p, int reg);
 */
 
 int					get_relative(int adr, int inc, int mod);
-int					ft_get_params(unsigned char *arena, int adr, t_list *p);
+// new
+int					ft_get_data(unsigned char *arena, t_list *p, int ptr, \
+						t_param *dt);
+// here
+int					ft_get_params(unsigned char *arena, t_list *p);
 int					get_ptype(unsigned char ocp, int pos);
 int					get_type_siz(int type, int label_size);
 

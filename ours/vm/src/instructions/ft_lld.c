@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/25 03:41:30 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/25 03:52:49 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/29 21:50:12 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,9 @@
 
 void				ft_lld(t_list *p, t_global *gb)
 {
-	int		nxt;
-	int		adr;
-
-	if ((nxt = ft_get_params(gb->arena, ADR(p), p)))
+	if (gb)
 	{
-		if (PAR(p)[0].type == T_IND)
-		{
-			adr = get_relative(ADR(p), (short)(PAR(p)[0].val), 0);
-			PAR(p)[0].val = ft_get_int(gb->arena, adr, 4);
-		}
 		CARRY(p) = ((PAR(p)[0].val == 0) ? 1 : 0);
 		ft_reg_write(p, PAR(p)[1].reg, PAR(p)[0].val);
-		NEXT(p) = (nxt) % MEM_SIZE;
 	}
-	else
-		NEXT(p) = (ADR(p) + 1) % MEM_SIZE;
 }
