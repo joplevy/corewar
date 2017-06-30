@@ -6,21 +6,11 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/30 00:27:24 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/30 01:55:33 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/30 23:47:15 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
-
-static void			print_com(char *comment)
-{
-	int				i;
-
-	i = 1;
-	while (++i && comment[i] != '\0')
-		ft_putchar(comment[i]);
-	ft_putchar('\n');
-}
 
 void				check_lives(t_global *global)
 {
@@ -71,38 +61,13 @@ void				treat_all_procs(t_global *global)
 	}
 }
 
-void				announce_winner(t_global *gb)
-{
-	int				i;
-	t_player		*winner;
-
-	if (gb->show)
-		endwin();
-	winner = NULL;
-	i = -1;
-	while (++i < gb->nb_pl)
-	{
-		if (((gb->players)[i])->id == gb->last_id)
-		{
-			winner = (gb->players)[i];
-			break ;
-		}
-	}
-	if (!winner)
-		ft_printf("No winner for this match!\n");
-	else
-	{
-		ft_printf("And the winner is : %s!\n", winner->name);
-		ft_printf("Sir, do you have anything to say to your fans ?\n");
-		print_com(gb->players[-(gb->last_id) - 1]->comment);
-	}
-}
-
 void				play(t_global *global, struct timespec speed)
 {
 	int				cycles;
 	int				period;
 
+	if (global->show)
+		introduce((t_player**)(global->players));
 	cycles = -1;
 	period = 0;
 	while (++cycles != global->dump && global->procs != NULL)

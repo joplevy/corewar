@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 12:35:25 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/30 01:22:56 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/30 19:58:55 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int					ft_power(int nb, int power);
 int					get_next_line(int const fd, char **line);
 int					ft_printf(const char *format, ...);
 int					ft_abs(int i);
-void				*ft_lstfree(t_list **lst, void (*ft_free_node)(void *));
+void				*ft_lstfree(t_list **lst, void (*ft_free_node)(void **));
 void				ft_lstdelnode(t_list **lst, t_list *node, \
 						void (*f)(void *));
 t_list				*ft_get_args(int ac, char **av, t_opt *tab, char elsetype);

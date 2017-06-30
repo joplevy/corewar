@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/11 18:26:03 by jplevy            #+#    #+#             */
-/*   Updated: 2016/01/11 18:34:14 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/30 20:01:57 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 void	ft_memdel(void **ap)
 {
-	free(*ap);
-	*ap = NULL;
+	if (*ap != NULL)
+	{
+		free(*ap);
+		*ap = NULL;
+	}
 }

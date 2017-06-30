@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/30 01:47:05 by jplevy           ###   ########.fr       */
+/*   Updated: 2017/06/30 23:41:17 by rvan-der         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,12 @@
 # define OP_LAB(OP) (g_op_tab[OP - 1].label_size)
 
 # define SPEED (1000000000 / 60)
+
 # define TAB_HEIGHT 64
 # define TAB_WIDTH 64
-# define USAGE "./corewar [(-p x) player.cor]...\n-p x\tset player as x nb%s%s"
-# define USAGE1 "\n-n\tset ncurses mode\n-v\tset verbose mode\n"
-# define USAGE2 "-dump x\tdump memory after x cycles\n"
+
+# define E_INIT "Error at initialization\n"
+# define E_
 
 typedef struct		s_param
 {
@@ -182,8 +183,21 @@ int					get_type_siz(int type, int label_size);
 
 void				check_lives(t_global *global);
 void				treat_all_procs(t_global *global);
-void				announce_winner(t_global *gb);
 void				play(t_global *global, struct timespec speed);
+
+/*
+**		messages.c
+*/
+
+void				introduce(t_player **players);
+void				announce_winner(t_global *gb);
+void				exit_msg(t_global *gb, t_opt *tab, t_list *ag, char *msg);
+
+/*
+**		clear_mem.c
+*/
+
+void				clear_mem(t_global *gb, t_opt *tab, t_list *args);
 
 extern void			(*g_instructab[17])(t_list *, t_global *);
 #endif

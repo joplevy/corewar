@@ -6,7 +6,7 @@
 #    By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/06 14:23:18 by niludwig          #+#    #+#              #
-#    Updated: 2017/06/30 01:07:43 by jplevy           ###   ########.fr        #
+#    Updated: 2017/06/30 23:39:06 by rvan-der         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,8 @@ VM_FILE = affichage.c \
 			main.c \
 			set_global.c \
 			load_players.c \
+			messages.c \
+			clear_mem.c \
 			instructions/ft_live.c \
 			instructions/ft_ld.c \
 			instructions/ft_st.c \
