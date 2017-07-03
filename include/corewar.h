@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   corewar.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/30 23:41:17 by rvan-der         ###   ########.fr       */
+/*   Updated: 2017/07/03 20:00:10 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # define OP_OCP(OP) (g_op_tab[OP - 1].ocp)
 # define OP_LAB(OP) (g_op_tab[OP - 1].label_size)
 
-# define SPEED 100
+# define SPEED 1500
 
 # define TAB_HEIGHT 64
 # define TAB_WIDTH 64
@@ -82,6 +82,7 @@ typedef struct		s_player
 
 typedef struct		s_global
 {
+	char			livescol[59];
 	t_list			*procs;
 	t_player		*players[MAX_PLAYERS + 1];
 	unsigned char	*arena;
@@ -118,7 +119,7 @@ int					check_magic(int fd);
 */
 
 void				init_ncurses(t_global *all);
-void				end_ncurses(WINDOW *box);
+void				end_ncurses(t_global *all);
 void				box_put_arena(t_global *all, struct timespec speed, \
 															int period);
 void				ft_putbinary(char *str, int size);
@@ -204,5 +205,28 @@ void				exit_msg(t_global *gb, t_opt *tab, t_list *ag, char *msg);
 
 void				clear_mem(t_global *gb, t_opt *tab, t_list *args);
 
-extern void			(*g_instructab[17])(t_list *, t_global *);
+static void			(*g_instructab[17])(t_list *, t_global *) =
+{
+	&ft_live, &ft_ld, &ft_st, &ft_add, &ft_sub, &ft_and,
+	&ft_or, &ft_xor, &ft_zjmp, &ft_ldi, &ft_sti, &ft_fork,
+	&ft_lld, &ft_lldi, &ft_lfork, &ft_aff, NULL
+};
+
+static char			game_over[15][56] =
+{
+	"  _______      ___       ___  ___   _______",
+	" /  _____|    /   \\     |   \\/   | |   ____|",
+	"|  |  __     /  ^  \\    |  \\  /  | |  |__",
+	"|  | |_ |   /  /_\\  \\   |  |\\/|  | |   __|",
+	"|  |__| |  /  _____  \\  |  |  |  | |  |____ ",
+	" \\______| /__/     \\__\\ |__|  |__| |_______|",
+	"",
+	"  ______   ____    ____  _______  ______ ",
+	" /  __  \\  \\   \\  /   / |   ____||   _  \\ ",
+	"|  |  |  |  \\   \\/   /  |  |__   |  |_)  |  ",
+	"|  |  |  |   \\      /   |   __|  |      /   ",
+	"|  `--'  |    \\    /    |  |____ |  |\\  \\----.",
+	" \\______/      \\__/     |_______|| _| `._____|"
+};
+//extern void			(*g_instructab[17])(t_list *, t_global *);
 #endif

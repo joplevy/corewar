@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 21:46:00 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/30 21:03:08 by rvan-der         ###   ########.fr       */
+/*   Updated: 2017/07/03 20:03:01 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ t_global	*init_global(void)
 	i = -1;
 	while (++i < MAX_PLAYERS)
 		ret->players[i] = NULL;
+	i = -1;
+	while (++i < 59)
+		ret->livescol[i] = 0;
 	ret->lives = 0;
 	ret->last_id = 0;
 	ret->cycles = -1;

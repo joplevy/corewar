@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   messages.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvan-der <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/30 18:15:32 by rvan-der          #+#    #+#             */
-/*   Updated: 2017/06/30 21:29:35 by rvan-der         ###   ########.fr       */
+/*   Updated: 2017/07/03 19:40:28 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ void				announce_winner(t_global *gb)
 	{
 		ft_printf("And the winner is : %s!\n", winner->name);
 		ft_printf("-Sir, do you have anything to say to your fans ?\n");
-		ft_printf("-%s\n", (winner->comment) + 1);
+		ft_printf("-%s\n", (winner->comment) + 2);
 	}
 }

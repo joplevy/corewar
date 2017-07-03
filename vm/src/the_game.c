@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   the_game.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/30 00:27:24 by jplevy            #+#    #+#             */
-/*   Updated: 2017/06/30 23:47:15 by rvan-der         ###   ########.fr       */
+/*   Updated: 2017/07/03 18:22:01 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,17 +75,14 @@ void				play(t_global *global, struct timespec speed)
 		{
 			check_lives(global);
 			period = 0;
-			if (global->show)
-				mvwprintw(global->info, 60, 2, "period = %d", period);
 		}
 		if (global->show == 1)
 			box_put_arena(global, speed, period);
 	}
 	if (global->dump == global->cycles)
 		ft_putbinary((char *)(global->arena), MEM_SIZE);
+	else if (global->show)
+		end_ncurses(global);
 	else
-	{
-		end_ncurses(global->box);
 		announce_winner(global);
-	}
 }

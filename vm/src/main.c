@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:00:57 by joeyplev          #+#    #+#             */
-/*   Updated: 2017/06/30 23:37:31 by rvan-der         ###   ########.fr       */
+/*   Updated: 2017/07/03 18:22:59 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ int					main(int ac, char **av)
 		exit_msg(global, NULL, args, "usg");
 	init_ncurses(global);
 	play(global, speed);
-	if (global->show == 1)
-		end_ncurses(global->box);
 	clear_mem(global, NULL, args);
 	return (0);
 }
