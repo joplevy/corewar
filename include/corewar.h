@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   corewar.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/07/03 20:00:10 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/07/04 02:55:31 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # define OP_OCP(OP) (g_op_tab[OP - 1].ocp)
 # define OP_LAB(OP) (g_op_tab[OP - 1].label_size)
 
-# define SPEED 1500
+# define SPEED 6000
 
 # define TAB_HEIGHT 64
 # define TAB_WIDTH 64
@@ -123,11 +123,24 @@ void				end_ncurses(t_global *all);
 void				box_put_arena(t_global *all, struct timespec speed, \
 															int period);
 void				ft_putbinary(char *str, int size);
+void				color_init(t_global *all);
+
+/*
+**		aff_info.c
+*/
+
+int					count_procs(t_global *all);
+void				put_player(WINDOW *info, t_player *pl, int y, int x);
+void				ft_put_gb_info(t_global *all, int period, int offset);
+void				put_info(t_global *all, int period);
+t_player			*ft_print_go(t_global *gb, int *i, int offset);
 
 /*
 **		set_global.c
 */
 
+int					set_players_id(t_player **players, t_global *gb);
+int					get_player(t_global *global, int pid, t_list *list);
 int					set_global(t_list *args, t_global *gb);
 
 /*
@@ -204,6 +217,7 @@ void				exit_msg(t_global *gb, t_opt *tab, t_list *ag, char *msg);
 */
 
 void				clear_mem(t_global *gb, t_opt *tab, t_list *args);
+void				delete_players(t_player **players);
 
 static void			(*g_instructab[17])(t_list *, t_global *) =
 {
@@ -212,7 +226,7 @@ static void			(*g_instructab[17])(t_list *, t_global *) =
 	&ft_lld, &ft_lldi, &ft_lfork, &ft_aff, NULL
 };
 
-static char			game_over[15][56] =
+static char			g_game_over[15][56] =
 {
 	"  _______      ___       ___  ___   _______",
 	" /  _____|    /   \\     |   \\/   | |   ____|",
@@ -228,5 +242,4 @@ static char			game_over[15][56] =
 	"|  `--'  |    \\    /    |  |____ |  |\\  \\----.",
 	" \\______/      \\__/     |_______|| _| `._____|"
 };
-//extern void			(*g_instructab[17])(t_list *, t_global *);
 #endif

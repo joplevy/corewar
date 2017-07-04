@@ -6,7 +6,7 @@
 #    By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/06 14:23:18 by niludwig          #+#    #+#              #
-#    Updated: 2017/06/30 23:39:06 by rvan-der         ###   ########.fr        #
+#    Updated: 2017/07/04 02:55:50 by jplevy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,6 @@ VM_EX = corewar
 VM_FILE = affichage.c \
 			get_info.c \
 			init.c \
-			instructab.c \
 			get_params.c \
 			rd_rw.c \
 			the_game.c \
@@ -43,6 +42,7 @@ VM_FILE = affichage.c \
 			load_players.c \
 			messages.c \
 			clear_mem.c \
+			aff_info.c \
 			instructions/ft_live.c \
 			instructions/ft_ld.c \
 			instructions/ft_st.c \

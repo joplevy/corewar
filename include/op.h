@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/21 02:26:48 by niludwig          #+#    #+#             */
-/*   Updated: 2017/07/03 19:32:11 by joeyplevy        ###   ########.fr       */
+/*   Updated: 2017/07/04 02:20:24 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@
 # define REG_NUMBER				16
 
 # define CYCLE_TO_DIE			1536
-// # define CYCLE_TO_DIE			50
 # define CYCLE_DELTA			50
 # define NBR_LIVE				21
 # define MAX_CHECKS				10
