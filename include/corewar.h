@@ -40,7 +40,7 @@
 # define OP_OCP(OP) (g_op_tab[OP - 1].ocp)
 # define OP_LAB(OP) (g_op_tab[OP - 1].label_size)
 
-# define SPEED 6000
+# define SPEED 60
 
 # define TAB_HEIGHT 64
 # define TAB_WIDTH 64
@@ -108,11 +108,11 @@ typedef struct		s_global
 **		get_info.c
 */
 
-void				exit_message(char *str);
 int					read_name(int fd, t_player *player);
 int					read_comment(int fd, t_player *player);
 int					read_code(int fd, t_player *player);
 int					check_magic(int fd);
+int					get_info_player(int fd, t_player *player);
 
 /*
 **		affichage.c
@@ -151,7 +151,6 @@ int					load_players(t_global *gb);
 int					init_new_proc(t_global *gb, int pos, int id);
 t_global			*init_global(void);
 t_opt				*opt_tab(void);
-int					get_info_player(int fd, t_player *player);
 
 /*
 **		instructions/

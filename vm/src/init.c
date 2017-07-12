@@ -85,16 +85,3 @@ int			init_new_proc(t_global *gb, int pos, int id)
 	ft_lstadd(&(gb->procs), new);
 	return (1);
 }
-
-int			get_info_player(int fd, t_player *player)
-{
-	if (check_magic(fd) == 0)
-		return (0);
-	if (read_name(fd, player) == 0)
-		return (0);
-	if (read_comment(fd, player) == 0)
-		return (0);
-	if (read_code(fd, player) == 0)
-		return (0);
-	return (1);
-}

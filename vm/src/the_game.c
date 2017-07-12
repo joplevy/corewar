@@ -12,6 +12,22 @@
 
 #include <corewar.h>
 
+int					is_lastpc(t_list *procs, int adr)
+{
+	int				n;
+	t_list			*tmp;
+
+	n = 0;
+	tmp = procs;
+	while (tmp != NULL)
+	{
+		if (ADR(tmp) == adr)
+			n++;
+		tmp = tmp->next;
+	}
+	return (n > 1 ? 0 : 1);
+}
+
 void				check_lives(t_global *global)
 {
 	t_list			*tmp;
@@ -22,7 +38,11 @@ void				check_lives(t_global *global)
 	{
 		next = tmp->next;
 		if (!LIVE(tmp))
+		{
+			if (is_lastpc(global->procs, ADR(tmp)))
+				global->col[ADR(tmp)] &= 0xF0;
 			ft_lstdelnode(&(global->procs), tmp, NULL);
+		}
 		else
 			LIVE(tmp) = 0;
 		tmp = next;
@@ -39,7 +59,7 @@ void				check_lives(t_global *global)
 
 void				treat_all_procs(t_global *global)
 {
-	t_list		*tmp;
+	t_list			*tmp;
 
 	tmp = global->procs;
 	while (tmp != NULL)
@@ -49,7 +69,8 @@ void				treat_all_procs(t_global *global)
 			if (OPC(tmp) > 0 && OPC(tmp) < 17 && NEXT(tmp) \
 				!= ((ADR(tmp) + 1) % MEM_SIZE))
 				g_instructab[OPC(tmp) - 1](tmp, global);
-			global->col[ADR(tmp)] &= 0xF0;
+			if (is_lastpc(global->procs, ADR(tmp)))
+				global->col[ADR(tmp)] &= 0xF0;
 			global->col[NEXT(tmp)] = (global->col[NEXT(tmp)] & 0xF0) | PID(tmp);
 			ADR(tmp) = NEXT(tmp);
 			OPC(tmp) = global->arena[ADR(tmp)];

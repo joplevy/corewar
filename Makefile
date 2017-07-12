@@ -31,18 +31,18 @@ ASM_SRC = $(addprefix $(ASM_DIR),$(ASM_FILE))
 ASM_DST = $(addprefix $(ASM_OBJ_DIR),$(ASM_OBJ))
 
 VM_EX = corewar
-VM_FILE = affichage.c \
+VM_FILE = display.c \
 			get_info.c \
 			init.c \
 			get_params.c \
-			rd_rw.c \
+			rd_wr.c \
 			the_game.c \
 			main.c \
 			set_global.c \
 			load_players.c \
 			messages.c \
 			clear_mem.c \
-			aff_info.c \
+			display_info.c \
 			instructions/ft_live.c \
 			instructions/ft_ld.c \
 			instructions/ft_st.c \

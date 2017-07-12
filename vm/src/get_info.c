@@ -12,12 +12,6 @@
 
 #include <corewar.h>
 
-void		exit_message(char *str)
-{
-	ft_putstr_fd(str, 2);
-	exit(0);
-}
-
 int			read_name(int fd, t_player *player)
 {
 	char	space[6];
@@ -47,7 +41,7 @@ int			read_code(int fd, t_player *player)
 		return (0);
 	if (read(fd, s, 1) < 0)
 	{
-		ft_printf("Error : champ %s is to large.\n", player->name);
+		ft_printf("ERROR : champ %s is to large.\n", player->name);
 		return (0);
 	}
 	return (1);
@@ -68,6 +62,22 @@ int			check_magic(int fd)
 	if ((read(fd, s, 4)) <= 0)
 		return (0);
 	if (a != s[0] || b != s[1] || c != s[2] || d != s[3])
-		exit_message("fail compare in check_magic\n");
+	{
+		ft_printf("ERROR: wrong file format\n");
+		return (0);
+	}
+	return (1);
+}
+
+int			get_info_player(int fd, t_player *player)
+{
+	if (check_magic(fd) == 0)
+		return (0);
+	if (read_name(fd, player) == 0)
+		return (0);
+	if (read_comment(fd, player) == 0)
+		return (0);
+	if (read_code(fd, player) == 0)
+		return (0);
 	return (1);
 }

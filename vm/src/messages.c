@@ -14,9 +14,11 @@
 
 void				print_usage(void)
 {
+	ft_printf("An error occured...\nUsage:\n");
 	ft_printf("./corewar [(-p x) player.cor]...\n");
 	ft_printf("-p x\tset next player as x\n");
-	ft_printf("\n-n\tset ncurses mode\n-v\tset verbose mode\n");
+	ft_printf("\t(0 < x <= nb of players)\n");
+	ft_printf("-n\tset ncurses mode\n-v\tset verbose mode\n");
 	ft_printf("-dump x\tdump memory after x cycles\n");
 }
 
