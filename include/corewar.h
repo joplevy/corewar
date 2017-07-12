@@ -6,7 +6,7 @@
 /*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/18 21:27:59 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/30 23:41:17 by rvan-der         ###   ########.fr       */
+/*   Updated: 2017/07/04 02:55:31 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@
 # define OP_OCP(OP) (g_op_tab[OP - 1].ocp)
 # define OP_LAB(OP) (g_op_tab[OP - 1].label_size)
 
-# define SPEED (1000000000 / 60)
+# define SPEED 60
 
 # define TAB_HEIGHT 64
 # define TAB_WIDTH 64
+# define SEPARATOR "-----------------------------------------------------------"
 
 # define E_INIT "Error at initialization\n"
-# define E_
 
 typedef struct		s_param
 {
@@ -73,6 +73,8 @@ typedef struct		s_player
 	int				id;
 	int				size;
 	int				entry;
+	int				procs;
+	int				lives;
 	char			name[PROG_NAME_LENGTH];
 	char			comment[COMMENT_LENGTH];
 	char			code[CHAMP_MAX_SIZE];
@@ -80,14 +82,17 @@ typedef struct		s_player
 
 typedef struct		s_global
 {
+	char			livescol[59];
 	t_list			*procs;
 	t_player		*players[MAX_PLAYERS + 1];
 	unsigned char	*arena;
 	short			*col;
 	WINDOW			*box;
+	WINDOW			*info;
 	int				nb_process;
 	int				lives;
 	int				last_id;
+	int				cycles;
 	int				ctd;
 	int				checks;
 	int				dump;
@@ -103,25 +108,39 @@ typedef struct		s_global
 **		get_info.c
 */
 
-void				exit_message(char *str);
 int					read_name(int fd, t_player *player);
 int					read_comment(int fd, t_player *player);
 int					read_code(int fd, t_player *player);
 int					check_magic(int fd);
+int					get_info_player(int fd, t_player *player);
 
 /*
 **		affichage.c
 */
 
 void				init_ncurses(t_global *all);
-void				end_ncurses(WINDOW *box);
-void				box_put_arena(t_global *all);
+void				end_ncurses(t_global *all);
+void				box_put_arena(t_global *all, struct timespec speed, \
+															int period);
 void				ft_putbinary(char *str, int size);
+void				color_init(t_global *all);
+
+/*
+**		aff_info.c
+*/
+
+int					count_procs(t_global *all);
+void				put_player(WINDOW *info, t_player *pl, int y, int x);
+void				ft_put_gb_info(t_global *all, int period, int offset);
+void				put_info(t_global *all, int period);
+t_player			*ft_print_go(t_global *gb, int *i, int offset);
 
 /*
 **		set_global.c
 */
 
+int					set_players_id(t_player **players, t_global *gb);
+int					get_player(t_global *global, int pid, t_list *list);
 int					set_global(t_list *args, t_global *gb);
 
 /*
@@ -132,7 +151,6 @@ int					load_players(t_global *gb);
 int					init_new_proc(t_global *gb, int pos, int id);
 t_global			*init_global(void);
 t_opt				*opt_tab(void);
-int					get_info_player(int fd, t_player *player);
 
 /*
 **		instructions/
@@ -198,6 +216,29 @@ void				exit_msg(t_global *gb, t_opt *tab, t_list *ag, char *msg);
 */
 
 void				clear_mem(t_global *gb, t_opt *tab, t_list *args);
+void				delete_players(t_player **players);
 
-extern void			(*g_instructab[17])(t_list *, t_global *);
+static void			(*g_instructab[17])(t_list *, t_global *) =
+{
+	&ft_live, &ft_ld, &ft_st, &ft_add, &ft_sub, &ft_and,
+	&ft_or, &ft_xor, &ft_zjmp, &ft_ldi, &ft_sti, &ft_fork,
+	&ft_lld, &ft_lldi, &ft_lfork, &ft_aff, NULL
+};
+
+static char			g_game_over[15][56] =
+{
+	"  _______      ___       ___  ___   _______",
+	" /  _____|    /   \\     |   \\/   | |   ____|",
+	"|  |  __     /  ^  \\    |  \\  /  | |  |__",
+	"|  | |_ |   /  /_\\  \\   |  |\\/|  | |   __|",
+	"|  |__| |  /  _____  \\  |  |  |  | |  |____ ",
+	" \\______| /__/     \\__\\ |__|  |__| |_______|",
+	"",
+	"  ______   ____    ____  _______  ______ ",
+	" /  __  \\  \\   \\  /   / |   ____||   _  \\ ",
+	"|  |  |  |  \\   \\/   /  |  |__   |  |_)  |  ",
+	"|  |  |  |   \\      /   |   __|  |      /   ",
+	"|  `--'  |    \\    /    |  |____ |  |\\  \\----.",
+	" \\______/      \\__/     |_______|| _| `._____|"
+};
 #endif

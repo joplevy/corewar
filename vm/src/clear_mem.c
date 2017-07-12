@@ -28,6 +28,7 @@ void			clear_mem(t_global *gb, t_opt *tab, t_list *args)
 		ft_lstfree(&(gb->procs), &ft_memdel);
 		ft_memdel((void**)(&(gb->col)));
 		delete_players((t_player**)(gb->players));
+		free(gb);
 	}
 	ft_memdel((void**)(&tab));
 	ft_lstfree(&args, &ft_memdel);

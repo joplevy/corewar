@@ -6,7 +6,7 @@
 #    By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/06 14:23:18 by niludwig          #+#    #+#              #
-#    Updated: 2017/06/30 23:39:06 by rvan-der         ###   ########.fr        #
+#    Updated: 2017/07/04 02:55:50 by jplevy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,18 +31,18 @@ ASM_SRC = $(addprefix $(ASM_DIR),$(ASM_FILE))
 ASM_DST = $(addprefix $(ASM_OBJ_DIR),$(ASM_OBJ))
 
 VM_EX = corewar
-VM_FILE = affichage.c \
+VM_FILE = display.c \
 			get_info.c \
 			init.c \
-			instructab.c \
 			get_params.c \
-			rd_rw.c \
+			rd_wr.c \
 			the_game.c \
 			main.c \
 			set_global.c \
 			load_players.c \
 			messages.c \
 			clear_mem.c \
+			display_info.c \
 			instructions/ft_live.c \
 			instructions/ft_ld.c \
 			instructions/ft_st.c \

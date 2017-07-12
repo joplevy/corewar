@@ -79,6 +79,7 @@ int				get_player(t_global *global, int pid, t_list *list)
 		close(arg->fd);
 		return (0);
 	}
+	((global->players)[i])->lives = 0;
 	close(arg->fd);
 	return (1);
 }

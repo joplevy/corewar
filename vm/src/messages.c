@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   messages.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvan-der <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/30 18:15:32 by rvan-der          #+#    #+#             */
-/*   Updated: 2017/06/30 21:29:35 by rvan-der         ###   ########.fr       */
+/*   Updated: 2017/07/03 19:40:28 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 void				print_usage(void)
 {
+	ft_printf("An error occured...\nUsage:\n");
 	ft_printf("./corewar [(-p x) player.cor]...\n");
 	ft_printf("-p x\tset next player as x\n");
-	ft_printf("\n-n\tset ncurses mode\n-v\tset verbose mode\n");
+	ft_printf("\t(0 < x <= nb of players)\n");
+	ft_printf("-n\tset ncurses mode\n-v\tset verbose mode\n");
 	ft_printf("-dump x\tdump memory after x cycles\n");
 }
 
@@ -44,16 +46,6 @@ void				introduce(t_player **players)
 	ft_printf("...\n...\n");
 }
 
-static void			print_com(char *comment)
-{
-	int				i;
-
-	i = 1;
-	while (++i && comment[i] != '\0')
-		ft_putchar(comment[i]);
-	ft_putchar('\n');
-}
-
 void				announce_winner(t_global *gb)
 {
 	int				i;
@@ -76,7 +68,7 @@ void				announce_winner(t_global *gb)
 	else
 	{
 		ft_printf("And the winner is : %s!\n", winner->name);
-		ft_printf("-Sir, do you have anything to say to your fans ?\n-");
-		print_com(gb->players[-(gb->last_id) - 1]->comment);
+		ft_printf("-Sir, do you have anything to say to your fans ?\n");
+		ft_printf("-%s\n", (winner->comment) + 2);
 	}
 }

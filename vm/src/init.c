@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: joeyplevy <joeyplevy@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/25 21:46:00 by joeyplevy         #+#    #+#             */
-/*   Updated: 2017/06/30 21:03:08 by rvan-der         ###   ########.fr       */
+/*   Updated: 2017/07/03 20:03:01 by joeyplevy        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,12 @@ t_global	*init_global(void)
 	i = -1;
 	while (++i < MAX_PLAYERS)
 		ret->players[i] = NULL;
+	i = -1;
+	while (++i < 59)
+		ret->livescol[i] = 0;
 	ret->lives = 0;
 	ret->last_id = 0;
+	ret->cycles = -1;
 	ret->ctd = CYCLE_TO_DIE;
 	ret->checks = 0;
 	ret->dump = -2;
@@ -79,18 +83,5 @@ int			init_new_proc(t_global *gb, int pos, int id)
 	NEXT(new) = (OPC(new) > 0 && OPC(new) < 17) ? \
 		ft_get_params(gb->arena, new) : (ADR(new) + 1) % MEM_SIZE;
 	ft_lstadd(&(gb->procs), new);
-	return (1);
-}
-
-int			get_info_player(int fd, t_player *player)
-{
-	if (check_magic(fd) == 0)
-		return (0);
-	if (read_name(fd, player) == 0)
-		return (0);
-	if (read_comment(fd, player) == 0)
-		return (0);
-	if (read_code(fd, player) == 0)
-		return (0);
 	return (1);
 }

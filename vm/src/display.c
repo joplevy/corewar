@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   affichage.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joeyplev <joeyplev@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jplevy <jplevy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/14 14:12:41 by joeyplev          #+#    #+#             */
-/*   Updated: 2017/06/29 19:33:28 by niludwig         ###   ########.fr       */
+/*   Updated: 2017/07/04 02:58:57 by jplevy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
-void		box_put_arena(t_global *all)
+void		box_put_arena(t_global *all, struct timespec speed, int period)
 {
 	int		i;
 	int		x;
@@ -31,13 +31,37 @@ void		box_put_arena(t_global *all)
 		wprintw(all->box, "%02x", all->arena[i]);
 		wattroff(all->box, COLOR_PAIR(col));
 	}
+	put_info(all, period);
 	wrefresh(all->box);
+	nanosleep(&speed, &speed);
 }
 
-void		end_ncurses(WINDOW *box)
+void		end_ncurses(t_global *gb)
 {
+	int			i;
+	int			offset;
+	t_player	*winner;
+
+	offset = 23 + (gb->nb_pl * 5);
+	i = -1;
+	winner = ft_print_go(gb, &i, offset);
+	if (winner)
+	{
+		mvwprintw(gb->info, offset + (++i), 2, \
+			"And the winner is : %s!\n", winner->name);
+		mvwprintw(gb->info, offset + (++i), 2, \
+			"-Sir, do you have anything to say to your fans ?\n");
+		mvwprintw(gb->info, offset + (++i), 2, \
+			"-%s\n", (winner->comment) + 2);
+	}
+	else
+		mvwprintw(gb->info, offset + (++i), 2, "No winner for this match!\n");
+	mvwprintw(gb->info, 64, 22, "press any key to exit");
+	box(gb->info, 0, 0);
+	wrefresh(gb->info);
 	getch();
-	delwin(box);
+	delwin(gb->box);
+	delwin(gb->info);
 	endwin();
 }
 
@@ -74,6 +98,8 @@ void		init_ncurses(t_global *all)
 	if (all->show != 1)
 		return ;
 	initscr();
+	cbreak();
+	noecho();
 	curs_set(0);
 	refresh();
 	start_color();
@@ -85,6 +111,7 @@ void		init_ncurses(t_global *all)
 			init_pair((txt << 4) | fond, txt, fond);
 	}
 	all->box = newwin(TAB_HEIGHT + 2, (TAB_WIDTH * 3) + 3, 0, 0);
+	all->info = newwin(TAB_HEIGHT + 2, 65, 0, (TAB_WIDTH * 3) + 4);
 	box(all->box, 0, 0);
 }
 
